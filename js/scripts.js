@@ -5,7 +5,7 @@ function Player(forename,lastname){
     this.lastname = lastname;
 }
 
-function machWas() {
+function addNewPlayer() {
     var player1 = new Player("Florian", "Krohmer");
     var player2 = new Player("Zina","Krohmer");
 
@@ -19,5 +19,8 @@ function machWas() {
     console.log(player3.forename + ' ' + player3.lastname);
 }
 
-let trigger = document.getElementById("header");
-trigger.addEventListener("click", machWas);
+let trigger = document.getElementsByClassName("add-new-player");
+
+for (var i = 0; i < trigger.length; i++) {
+    trigger[i].addEventListener('click', addNewPlayer);
+}
