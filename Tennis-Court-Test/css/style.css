@@ -1,0 +1,38 @@
+#tennisFacility {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 1rem;
+}
+.court {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    border: 5px solid #c5300f;
+    padding: 1rem;
+}
+
+.court-players {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-gap: .5rem;
+    background: #c5300f;
+    padding: 1rem;
+}
+
+.player {
+    text-align: center;
+}
+
+.add-player {
+    align-self: center;
+}
+
+.remove-player {
+    border-radius: 50%;
+}
+
+h2 {
+    text-align: center;
+}
