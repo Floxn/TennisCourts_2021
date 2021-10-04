@@ -49,6 +49,7 @@ function buildCourtHTML(courtNumber) {
     // Build Court Wrapper
     newCourt = document.createElement('div');
     newCourt.classList.add('court', courtNumberClass);
+    newCourt.setAttribute('data-court', courtNumber);
     newCourt.id = courtNumberClass;
     const courtElement = newCourt;
 
@@ -62,7 +63,7 @@ function buildCourtHTML(courtNumber) {
 
     // Build add Player Button
     addPlayerButton = document.createElement('button');
-    addPlayerButton.classList.add('add-player', 'add-player-' +courtNumberClass);
+    addPlayerButton.classList.add('add-player', 'add-player-' + courtNumberClass);
     addPlayerButton.textContent = 'add new Player';
 
     facility.appendChild(courtElement);
@@ -86,10 +87,8 @@ function buildPlayerHTML(playerForename, playerLastname, playerNumber) {
 
 function addPlayersToCourt() {
 
-    // get the court id
-    let courtId = this.parentElement.id;
-    courtId = courtId.replace('court-','');
-    courtId = parseInt(courtId);
+    // get the court data
+    let courtData = parseInt(this.parentElement.getAttribute('data-court'));
 
     // get the name of the player who will be added
     const playerForename = prompt("Please enter Forename");
@@ -97,7 +96,7 @@ function addPlayersToCourt() {
     const newPlayer = new Player(playerForename, playerLastname);
 
     // find the correct Court object
-    let currentCourt = tennisFacility.find(Court => Court.courtNumber === courtId);
+    let currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
 
     // get length of Players Object in the current court
     let courtPlayerLength = Object.keys(currentCourt.players).length + 1;
