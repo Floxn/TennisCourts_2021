@@ -3,7 +3,6 @@
 
 
 let tennisFacility = [];
-var players = {};
 
 const facility = document.getElementById("tennisFacility");
 
@@ -19,9 +18,11 @@ function Player(forename, lastname) {
 // On one court it is possible to enter 4 player
 function Court(courtNumber) {
     this.courtNumber = courtNumber;
+    this.timeSlots = {};
     this.players = {};
 }
 
+// Check how many Court the Facility have
 function howManyCourts() {
     let numberOfCourts = (function ask() {
         var number = prompt('How many Courts are on the tennis facility?');
@@ -30,17 +31,46 @@ function howManyCourts() {
     addNewCourt(numberOfCourts);
 }
 
+// add the Courts to the facility
 function addNewCourt(numberOfCourts) {
-    console.log('Number of Courts:' + numberOfCourts)
     for (let courtNumber = 1; courtNumber <= numberOfCourts; courtNumber++) {
 
         buildCourtHTML(courtNumber);
-
         let newCourt = new Court(tennisFacility.length + 1);
+
+        // add the timeslots to the court
+        let begin = 7;
+        for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
+            buildSlotHTML(courtNumber, timeSlots);
+            let slot = 'timeSlot-' + timeSlots;
+            newCourt.timeSlots[slot] = begin + ':00 Uhr - ' + (begin+1) + ':00 Uhr';
+            begin += 1;
+        }
+
         tennisFacility.push(newCourt);
     }
     addPlayerButtonEventListener();
 
+}
+
+function buildSlotHTML(courtNumber,slotNumber) {
+    let container = document.querySelector('[data-court="'+ courtNumber +'"]')
+    let theSlot = container.querySelector('.court-slots');
+
+    const slotNumberClass = 'time-slot-' + slotNumber;
+
+    newSlot = document.createElement('div');
+    newSlot.classList.add('time-slot', slotNumberClass);
+    newSlot.setAttribute('data-time-slot', slotNumber);
+    newSlot.textContent = 'Time Slot: ' + slotNumber;
+    const slotElement = newSlot
+
+    // Build Player Wrapper
+    slotPlayer = document.createElement('div');
+    slotPlayer.classList.add('slot-players');
+
+    theSlot.appendChild(newSlot);
+    slotElement.appendChild(slotPlayer);
 }
 
 function buildCourtHTML(courtNumber) {
@@ -61,6 +91,10 @@ function buildCourtHTML(courtNumber) {
     courtPlayers = document.createElement('div');
     courtPlayers.classList.add('court-players');
 
+    // Build Timeslots Wrapper
+    courtTimeSlots = document.createElement('div');
+    courtTimeSlots.classList.add('court-slots');
+
     // Build add Player Button
     addPlayerButton = document.createElement('button');
     addPlayerButton.classList.add('add-player', 'add-player-' + courtNumberClass);
@@ -69,6 +103,7 @@ function buildCourtHTML(courtNumber) {
     facility.appendChild(courtElement);
     courtElement.appendChild(courtHeadline);
     courtElement.appendChild(courtPlayers);
+    courtElement.appendChild(courtTimeSlots);
     courtElement.appendChild(addPlayerButton);
 }
 
@@ -124,6 +159,8 @@ function removePlayerFromCourt() {
     delete currentCourt.players[currentPlayersId];
 
     parent.parentNode.removeChild(this.parentNode);
+
+    // TODO remove console log
     console.log('Player ' + currentPlayersId + ' is deleted from Court-id: ' + playersCourtId);
 
 }
@@ -142,6 +179,31 @@ function removePlayerButtonEventListener() {
     for (let i = 0; i < removePlayerButtons.length; i++) {
         removePlayerButtons[i].addEventListener('click', removePlayerFromCourt);
     }
+}
+
+
+getNextSevenDates();
+function getNextSevenDates() {
+    const currentDate = new Date();
+    germanDateOutput(currentDate);
+
+    for (let i = 1; i <= 6; i++) {
+        addDays(currentDate, i);
+    }
+}
+
+function germanDateOutput(date) {
+    const thisDate = new Date(date);
+    const day = thisDate.getDate();
+    const month = (thisDate.getMonth()+1);
+    const year = thisDate.getFullYear();
+    console.log('Datum: ' + day + '.' + month + '.' + year);
+}
+
+function addDays(date, days) {
+    let getNewDate = new Date(date);
+    const newDate = getNewDate.setDate(getNewDate.getDate() + days);
+    germanDateOutput(newDate);
 }
 
 document.addEventListener("DOMContentLoaded", howManyCourts);

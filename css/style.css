@@ -33,6 +33,19 @@
     border-radius: 50%;
 }
 
+.court-slots {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-slot:nth-child(even) {
+    background: #c5300f;
+}
+.time-slot:nth-child(odd) {
+    background: #8a210a;
+    color: white;
+}
+
 h2 {
     text-align: center;
 }
