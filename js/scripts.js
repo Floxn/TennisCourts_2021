@@ -1,6 +1,5 @@
-
-// TODO next: Make Timetable for each Court to add players on court for each Hour for example 17-18 o´clock order 09-10 o´clock
-
+// TODO next: Check if player id is already exists in court and time slot
+// TODO next next :) : Include Database
 
 let tennisFacility = [];
 
@@ -19,14 +18,13 @@ function Player(forename, lastname) {
 function Court(courtNumber) {
     this.courtNumber = courtNumber;
     this.timeSlots = {};
-    this.players = {};
 }
 
 // Check how many Court the Facility have
 function howManyCourts() {
     let numberOfCourts = (function ask() {
-        var number = prompt('How many Courts are on the tennis facility?');
-        return isNaN(number) || +number <= 0 ? ask() : number;
+        var number = prompt('How many Courts are on the tennis facility? 1 - 20 is allowed');
+        return isNaN(number) || +number <= 0 || +number >= 21 ? ask() : number;
     }());
     addNewCourt(numberOfCourts);
 }
@@ -41,13 +39,15 @@ function addNewCourt(numberOfCourts) {
         // add the timeslots to the court
         let begin = 7;
         for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
-            buildSlotHTML(courtNumber, timeSlots);
             let slot = 'timeSlot-' + timeSlots;
+            let beginTime = begin + ':00 Uhr';
+            let endTime = (begin+1) + ':00 Uhr';
             newCourt.timeSlots[slot] = {
-                'time': begin + ':00 Uhr - ' + (begin+1) + ':00 Uhr',
+                'time': beginTime + ' - ' + endTime,
                 'players': {}
             };
             begin += 1;
+            buildSlotHTML(courtNumber, timeSlots, beginTime, endTime);
         }
 
         tennisFacility.push(newCourt);
@@ -56,7 +56,7 @@ function addNewCourt(numberOfCourts) {
     addPlayerButtonEventListener();
 }
 
-function buildSlotHTML(courtNumber,slotNumber) {
+function buildSlotHTML(courtNumber,slotNumber,beginTime, endTime) {
     const container = document.querySelector('[data-court="'+ courtNumber +'"]')
     const theSlot = container.querySelector('.court-slots');
 
@@ -65,8 +65,11 @@ function buildSlotHTML(courtNumber,slotNumber) {
     newSlot = document.createElement('div');
     newSlot.classList.add('time-slot', slotNumberClass);
     newSlot.setAttribute('data-time-slot', slotNumber);
-    newSlot.textContent = 'Time Slot: ' + slotNumber;
-    const slotElement = newSlot
+
+    // Build Slot Headline
+    slotHeadline = document.createElement('div');
+    slotHeadline.classList.add('time-slot-time');
+    slotHeadline.textContent = beginTime + ' - ' + endTime;
 
     // Build Player Wrapper
     slotPlayer = document.createElement('div');
@@ -74,12 +77,13 @@ function buildSlotHTML(courtNumber,slotNumber) {
 
     // Build add Player Button
     addPlayerButton = document.createElement('button');
-    addPlayerButton.classList.add('add-player', 'add-player-' + slotNumberClass);
+    addPlayerButton.classList.add('add-player','btn', 'btn-sm', 'btn-outline-success', 'add-player-' + slotNumberClass);
     addPlayerButton.textContent = 'add new Player';
 
     theSlot.appendChild(newSlot);
-    slotElement.appendChild(slotPlayer);
-    slotElement.appendChild(addPlayerButton);
+    newSlot.appendChild(slotHeadline);
+    newSlot.appendChild(slotPlayer);
+    newSlot.appendChild(addPlayerButton);
 }
 
 function buildCourtHTML(courtNumber) {
@@ -90,36 +94,30 @@ function buildCourtHTML(courtNumber) {
     newCourt.classList.add('court', courtNumberClass);
     newCourt.setAttribute('data-court', courtNumber);
     newCourt.id = courtNumberClass;
-    const courtElement = newCourt;
 
     // Build Court Headline
     courtHeadline = document.createElement('h2');
     courtHeadline.textContent = 'Court-No: ' + courtNumber;
 
-    // Build Player Wrapper
-    courtPlayers = document.createElement('div');
-    courtPlayers.classList.add('court-players');
-
     // Build Timeslots Wrapper
     courtTimeSlots = document.createElement('div');
     courtTimeSlots.classList.add('court-slots');
 
-    facility.appendChild(courtElement);
-    courtElement.appendChild(courtHeadline);
-    courtElement.appendChild(courtPlayers);
-    courtElement.appendChild(courtTimeSlots);
+    facility.appendChild(newCourt);
+    newCourt.appendChild(courtHeadline);
+    newCourt.appendChild(courtTimeSlots);
 }
 
 function buildPlayerHTML(playerForename, playerLastname, playerNumber) {
     // build new players element and append it
     newPlayerElement = document.createElement('div');
-    newPlayerElement.classList.add('player')
+    newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
     newPlayerElement.setAttribute('data-player', playerNumber);
     newPlayerElement.textContent = playerForename + ' ' + playerLastname;
 
     removeButton = document.createElement('button');
-    removeButton.classList.add('remove-player');
-    removeButton.textContent = '-';
+    removeButton.classList.add('remove-player', 'btn', 'btn-danger', 'rounded-0');
+    removeButton.textContent = 'x';
     newPlayerElement.appendChild(removeButton);
 }
 
@@ -128,6 +126,7 @@ function addPlayerToTimeSlot() {
     const slotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
     const courtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
     // get the name of the player who will be added
+    // TODO need to check if prompt is empty dont return NULL
     const playerForename = prompt("Please enter Forename");
     const playerLastname = prompt("Please enter Lastname");
     const newPlayer = new Player(playerForename, playerLastname);
