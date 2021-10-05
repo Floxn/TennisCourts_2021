@@ -22,11 +22,16 @@ function Court(courtNumber) {
 
 // Check how many Court the Facility have
 function howManyCourts() {
-    let numberOfCourts = (function ask() {
-        var number = prompt('How many Courts are on the tennis facility? 1 - 20 is allowed');
-        return isNaN(number) || +number <= 0 || +number >= 21 ? ask() : number;
-    }());
+    let numberOfCourts = document.querySelector('#howManyCourts').value
+    if (numberOfCourts <= 1 || numberOfCourts >= 21) {
+        return
+    }
+    deleteHowManyCourtsInput();
     addNewCourt(numberOfCourts);
+}
+
+function deleteHowManyCourtsInput() {
+    document.body.removeChild(document.querySelector('#initialCourtSetup'));
 }
 
 // add the Courts to the facility
@@ -41,7 +46,7 @@ function addNewCourt(numberOfCourts) {
         for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
             let slot = 'timeSlot-' + timeSlots;
             let beginTime = begin + ':00 Uhr';
-            let endTime = (begin+1) + ':00 Uhr';
+            let endTime = (begin + 1) + ':00 Uhr';
             newCourt.timeSlots[slot] = {
                 'time': beginTime + ' - ' + endTime,
                 'players': {}
@@ -56,8 +61,8 @@ function addNewCourt(numberOfCourts) {
     addPlayerButtonEventListener();
 }
 
-function buildSlotHTML(courtNumber,slotNumber,beginTime, endTime) {
-    const container = document.querySelector('[data-court="'+ courtNumber +'"]')
+function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
+    const container = document.querySelector('[data-court="' + courtNumber + '"]')
     const theSlot = container.querySelector('.court-slots');
 
     const slotNumberClass = 'time-slot-' + slotNumber;
@@ -77,7 +82,7 @@ function buildSlotHTML(courtNumber,slotNumber,beginTime, endTime) {
 
     // Build add Player Button
     addPlayerButton = document.createElement('button');
-    addPlayerButton.classList.add('add-player','btn', 'btn-sm', 'btn-outline-success', 'add-player-' + slotNumberClass);
+    addPlayerButton.classList.add('add-player', 'btn', 'btn-sm', 'btn-outline-success', 'add-player-' + slotNumberClass);
     addPlayerButton.textContent = 'add new Player';
 
     theSlot.appendChild(newSlot);
@@ -189,6 +194,7 @@ function removePlayerButtonEventListener() {
 
 
 getNextSevenDates();
+
 function getNextSevenDates() {
     const currentDate = new Date();
     germanDateOutput(currentDate);
@@ -201,7 +207,7 @@ function getNextSevenDates() {
 function germanDateOutput(date) {
     const thisDate = new Date(date);
     const day = thisDate.getDate();
-    const month = (thisDate.getMonth()+1);
+    const month = (thisDate.getMonth() + 1);
     const year = thisDate.getFullYear();
 }
 
@@ -212,3 +218,4 @@ function addDays(date, days) {
 }
 
 document.addEventListener("DOMContentLoaded", howManyCourts);
+document.querySelector('#initialCourtSetup .btn').addEventListener('click', howManyCourts);

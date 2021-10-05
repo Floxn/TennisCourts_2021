@@ -8,6 +8,29 @@ h2 {
     font-family: 'Monospaced';
 }
 
+#initialCourtSetup {
+    display: grid;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+#initialCourtSetup .h1 {
+    font-size: 5rem;
+}
+#initialCourtSetup .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+#initialCourtSetup .form-group button {
+    margin: 0 auto;
+}
+
+#initialCourtSetup~#tennisFacility {
+    display: none;
+}
+
 #tennisFacility {
     display: grid;
     grid-template-columns: 1fr;
