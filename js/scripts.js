@@ -43,19 +43,22 @@ function addNewCourt(numberOfCourts) {
         for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
             buildSlotHTML(courtNumber, timeSlots);
             let slot = 'timeSlot-' + timeSlots;
-            newCourt.timeSlots[slot] = begin + ':00 Uhr - ' + (begin+1) + ':00 Uhr';
+            newCourt.timeSlots[slot] = {
+                'time': begin + ':00 Uhr - ' + (begin+1) + ':00 Uhr',
+                'players': {}
+            };
             begin += 1;
         }
 
         tennisFacility.push(newCourt);
     }
-    addPlayerButtonEventListener();
 
+    addPlayerButtonEventListener();
 }
 
 function buildSlotHTML(courtNumber,slotNumber) {
-    let container = document.querySelector('[data-court="'+ courtNumber +'"]')
-    let theSlot = container.querySelector('.court-slots');
+    const container = document.querySelector('[data-court="'+ courtNumber +'"]')
+    const theSlot = container.querySelector('.court-slots');
 
     const slotNumberClass = 'time-slot-' + slotNumber;
 
@@ -67,10 +70,16 @@ function buildSlotHTML(courtNumber,slotNumber) {
 
     // Build Player Wrapper
     slotPlayer = document.createElement('div');
-    slotPlayer.classList.add('slot-players');
+    slotPlayer.classList.add('time-slot-players');
+
+    // Build add Player Button
+    addPlayerButton = document.createElement('button');
+    addPlayerButton.classList.add('add-player', 'add-player-' + slotNumberClass);
+    addPlayerButton.textContent = 'add new Player';
 
     theSlot.appendChild(newSlot);
     slotElement.appendChild(slotPlayer);
+    slotElement.appendChild(addPlayerButton);
 }
 
 function buildCourtHTML(courtNumber) {
@@ -95,16 +104,10 @@ function buildCourtHTML(courtNumber) {
     courtTimeSlots = document.createElement('div');
     courtTimeSlots.classList.add('court-slots');
 
-    // Build add Player Button
-    addPlayerButton = document.createElement('button');
-    addPlayerButton.classList.add('add-player', 'add-player-' + courtNumberClass);
-    addPlayerButton.textContent = 'add new Player';
-
     facility.appendChild(courtElement);
     courtElement.appendChild(courtHeadline);
     courtElement.appendChild(courtPlayers);
     courtElement.appendChild(courtTimeSlots);
-    courtElement.appendChild(addPlayerButton);
 }
 
 function buildPlayerHTML(playerForename, playerLastname, playerNumber) {
@@ -120,23 +123,23 @@ function buildPlayerHTML(playerForename, playerLastname, playerNumber) {
     newPlayerElement.appendChild(removeButton);
 }
 
-function addPlayersToCourt() {
-
-    // get the court data
-    let courtData = parseInt(this.parentElement.getAttribute('data-court'));
-
+function addPlayerToTimeSlot() {
+    // get the time slot and court data from the buttons parent time slot and court
+    const slotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
+    const courtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
     // get the name of the player who will be added
     const playerForename = prompt("Please enter Forename");
     const playerLastname = prompt("Please enter Lastname");
     const newPlayer = new Player(playerForename, playerLastname);
 
     // find the correct Court object
-    let currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
+    const currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
+    const currentTimeSlot = currentCourt.timeSlots['timeSlot-' + slotData];
 
     // get length of Players Object in the current court
-    let courtPlayerLength = Object.keys(currentCourt.players).length + 1;
+    const courtPlayerLength = Object.keys(currentTimeSlot.players).length + 1;
     playerNumber = 'player-' + courtPlayerLength;
-    currentCourt.players[playerNumber] = newPlayer;
+    currentTimeSlot.players[playerNumber] = newPlayer;
 
     // add Player
     buildPlayerHTML(playerForename, playerLastname, playerNumber);
@@ -144,32 +147,36 @@ function addPlayersToCourt() {
 
     // trigger eventListener
     removePlayerButtonEventListener();
-    console.log(tennisFacility);
 
+    // TODO remove console log
+    console.log(tennisFacility);
 }
 
-function removePlayerFromCourt() {
+function removePlayerFromTimeSlot() {
+    // find the correct player object at the correct position in object and delete it
     const parent = this.parentNode;
     const currentPlayersId = parent.getAttribute('data-player');
-    let playersCourtId = parent.parentNode.parentNode.id;
-    playersCourtId = playersCourtId.replace('court-','');
-    playersCourtId = parseInt(playersCourtId);
+    const slotData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-time-slot'));
+    const courtData = parseInt(this.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('data-court'));
 
-    let currentCourt = tennisFacility.find(Court => Court.courtNumber === playersCourtId);
-    delete currentCourt.players[currentPlayersId];
+    const currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
+    const currentTimeSlot = currentCourt.timeSlots['timeSlot-' + slotData];
 
+    // delete the player
+    delete currentTimeSlot.players[currentPlayersId];
+
+    // delete html player element
     parent.parentNode.removeChild(this.parentNode);
 
     // TODO remove console log
-    console.log('Player ' + currentPlayersId + ' is deleted from Court-id: ' + playersCourtId);
-
+    console.log(tennisFacility);
 }
 
 function addPlayerButtonEventListener() {
     let addPlayerButtons = document.querySelectorAll('.add-player');
 
     for (let i = 0; i < addPlayerButtons.length; i++) {
-        addPlayerButtons[i].addEventListener('click', addPlayersToCourt);
+        addPlayerButtons[i].addEventListener('click', addPlayerToTimeSlot);
     }
 }
 
@@ -177,7 +184,7 @@ function removePlayerButtonEventListener() {
     let removePlayerButtons = document.querySelectorAll('.remove-player');
 
     for (let i = 0; i < removePlayerButtons.length; i++) {
-        removePlayerButtons[i].addEventListener('click', removePlayerFromCourt);
+        removePlayerButtons[i].addEventListener('click', removePlayerFromTimeSlot);
     }
 }
 
@@ -197,7 +204,6 @@ function germanDateOutput(date) {
     const day = thisDate.getDate();
     const month = (thisDate.getMonth()+1);
     const year = thisDate.getFullYear();
-    console.log('Datum: ' + day + '.' + month + '.' + year);
 }
 
 function addDays(date, days) {
