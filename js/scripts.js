@@ -1,15 +1,18 @@
 // TODO next: Check if player id is already exists in court and time slot
+// TODO next: Weekly View
 // TODO next next :) : Include Database
 
 let tennisFacility = [];
+let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
 
+var theModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
 const facility = document.getElementById("tennisFacility");
 
 //// BUILD OBJECTS
 ////
 // Object to build a Player
-function Player(forename, lastname) {
-    this.forename = forename;
+function Player(firstname, lastname) {
+    this.firstname = firstname;
     this.lastname = lastname;
 }
 
@@ -71,10 +74,19 @@ function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
     newSlot.classList.add('time-slot', slotNumberClass);
     newSlot.setAttribute('data-time-slot', slotNumber);
 
-    // Build Slot Headline
-    slotHeadline = document.createElement('div');
-    slotHeadline.classList.add('time-slot-time');
-    slotHeadline.textContent = beginTime + ' - ' + endTime;
+    // Build Slot Time
+    slotTime = document.createElement('div');
+    slotTime.classList.add('time-slot-time');
+
+    slotTimeBegin = document.createElement('span');
+    slotTimeBegin.classList.add('time-slot-time-begin');
+    slotTimeBegin.textContent = beginTime;
+    slotTime.appendChild(slotTimeBegin);
+
+    slotTimeEnd = document.createElement('span');
+    slotTimeEnd.classList.add('time-slot-time-end');
+    slotTimeEnd.textContent = endTime;
+    slotTime.appendChild(slotTimeEnd);
 
     // Build Player Wrapper
     slotPlayer = document.createElement('div');
@@ -83,12 +95,20 @@ function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
     // Build add Player Button
     addPlayerButton = document.createElement('button');
     addPlayerButton.classList.add('add-player', 'btn', 'btn-sm', 'btn-outline-success', 'add-player-' + slotNumberClass);
+    setAttributes(addPlayerButton, {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'})
     addPlayerButton.textContent = 'add new Player';
 
     theSlot.appendChild(newSlot);
-    newSlot.appendChild(slotHeadline);
+    newSlot.appendChild(slotTime);
     newSlot.appendChild(slotPlayer);
     newSlot.appendChild(addPlayerButton);
+}
+
+// Helper functions
+function setAttributes(element, attributes) {
+    for (let key in attributes) {
+        element.setAttribute(key, attributes[key]);
+    }
 }
 
 function buildCourtHTML(courtNumber) {
@@ -113,44 +133,64 @@ function buildCourtHTML(courtNumber) {
     newCourt.appendChild(courtTimeSlots);
 }
 
-function buildPlayerHTML(playerForename, playerLastname, playerNumber) {
+function buildPlayerHTML(playerFirstname, playerLastname, playerNumber) {
     // build new players element and append it
     newPlayerElement = document.createElement('div');
     newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
     newPlayerElement.setAttribute('data-player', playerNumber);
-    newPlayerElement.textContent = playerForename + ' ' + playerLastname;
+    newPlayerElement.textContent = playerFirstname + ' ' + playerLastname;
 
     removeButton = document.createElement('button');
-    removeButton.classList.add('remove-player', 'btn', 'btn-danger', 'rounded-0');
+    removeButton.classList.add('remove-player', 'btn', 'btn-danger');
     removeButton.textContent = 'x';
     newPlayerElement.appendChild(removeButton);
 }
 
-function addPlayerToTimeSlot() {
-    // get the time slot and court data from the buttons parent time slot and court
-    const slotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
-    const courtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
-    // get the name of the player who will be added
-    // TODO need to check if prompt is empty dont return NULL
-    const playerForename = prompt("Please enter Forename");
-    const playerLastname = prompt("Please enter Lastname");
-    const newPlayer = new Player(playerForename, playerLastname);
+function getGlobalData() {
+    // write data to global variables
+    globalClickedTimeSlot = this;
+    globalSlotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
+    globalCourtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
+}
+
+function addPlayerToSlot() {
+
+    // get first and lastname input value
+    let playerFirstname = document.querySelector('[data-player-firstname]').value;
+    let playerLastname = document.querySelector('[data-player-lastname]').value;
+
+    // return if one of the inputs is not filled
+    if (!playerFirstname || !playerLastname) {
+        return alert('Please enter first and lastname');
+    }
+    // write new Player Object
+    const newPlayer = new Player(playerFirstname, playerLastname);
 
     // find the correct Court object
-    const currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
-    const currentTimeSlot = currentCourt.timeSlots['timeSlot-' + slotData];
+    const currentCourt = tennisFacility.find(Court => Court.courtNumber === globalCourtData);
+    const currentTimeSlot = currentCourt.timeSlots['timeSlot-' + globalSlotData];
 
     // get length of Players Object in the current court
     const courtPlayerLength = Object.keys(currentTimeSlot.players).length + 1;
+
     playerNumber = 'player-' + courtPlayerLength;
+
+    // add new Player to the current timeSlot
     currentTimeSlot.players[playerNumber] = newPlayer;
 
-    // add Player
-    buildPlayerHTML(playerForename, playerLastname, playerNumber);
-    this.previousElementSibling.appendChild(newPlayerElement);
+    // add Player to HTML
+    buildPlayerHTML(playerFirstname, playerLastname, playerNumber);
+    globalClickedTimeSlot.previousElementSibling.appendChild(newPlayerElement);
+
+    closeModal();
 
     // trigger eventListener
     removePlayerButtonEventListener();
+
+    // clear global Data
+    globalCourtData
+    globalSlotData
+    globalClickedTimeSlot = '';
 
     // TODO remove console log
     console.log(tennisFacility);
@@ -176,11 +216,17 @@ function removePlayerFromTimeSlot() {
     console.log(tennisFacility);
 }
 
+function closeModal() {
+    document.querySelector('[data-player-firstname]').value = '';
+    document.querySelector('[data-player-lastname]').value = '';
+    theModal.hide();
+}
+
 function addPlayerButtonEventListener() {
     let addPlayerButtons = document.querySelectorAll('.add-player');
 
     for (let i = 0; i < addPlayerButtons.length; i++) {
-        addPlayerButtons[i].addEventListener('click', addPlayerToTimeSlot);
+        addPlayerButtons[i].addEventListener('click', getGlobalData);
     }
 }
 
@@ -217,5 +263,6 @@ function addDays(date, days) {
     germanDateOutput(newDate);
 }
 
-document.addEventListener("DOMContentLoaded", howManyCourts);
+const addPlayerButtons = document.querySelector('[data-confirm-player]');
+addPlayerButtons.addEventListener('click', addPlayerToSlot);
 document.querySelector('#initialCourtSetup .btn').addEventListener('click', howManyCourts);
