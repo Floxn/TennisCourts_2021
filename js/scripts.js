@@ -35,6 +35,9 @@ function Court(courtNumber) {
     this.timeSlots = {};
 }
 
+function DatesOfOneWeek() {
+}
+
 // Check how many Court the Facility have
 function howManyCourts() {
     let numberOfCourts = document.querySelector('#howManyCourts').value
@@ -43,6 +46,9 @@ function howManyCourts() {
     }
     deleteHowManyCourtsInput();
     addNewCourt(numberOfCourts);
+
+    // not yet in use but need for Weekly View
+    getNextSevenDates();
 }
 
 function deleteHowManyCourtsInput() {
@@ -173,7 +179,18 @@ function addPlayerToSlot() {
 
     // return if one of the inputs is not filled
     if (!playerFirstname || !playerLastname) {
-        return alert('Please enter first and lastname');
+        if (!playerFirstname && !playerLastname) {
+            document.querySelector('[data-player-firstname]').focus();
+            return alert('Please enter first and lastname');
+        }
+        if (!playerFirstname && playerLastname) {
+            document.querySelector('[data-player-firstname]').focus();
+            return alert('Please enter firstname');
+        }
+        if (playerFirstname && !playerLastname) {
+            document.querySelector('[data-player-lastname]').focus();
+            return alert('Please enter lastname');
+        }
     }
     // write new Player Object
     const newPlayer = new Player(playerFirstname, playerLastname);
@@ -250,15 +267,16 @@ function removePlayerButtonEventListener() {
     }
 }
 
-// not yet in use but need for Weekly View
-getNextSevenDates();
 function getNextSevenDates() {
     const currentDate = new Date();
     germanDateOutput(currentDate);
-
-    for (let i = 1; i <= 6; i++) {
-        addDays(currentDate, i);
+    let allDates = new DatesOfOneWeek(fullDate)
+    for (let days = 0; days <= 6; days++) {
+        addDays(currentDate, days);
+        allDates['date-' + ( days+1 )] = fullDate;
     }
+    tennisFacility.push(allDates);
+    console.log(tennisFacility);
 }
 
 function germanDateOutput(date) {
@@ -266,12 +284,13 @@ function germanDateOutput(date) {
     const day = thisDate.getDate();
     const month = (thisDate.getMonth() + 1);
     const year = thisDate.getFullYear();
+    return fullDate = day + '.' + month + '.' + year;
 }
 
 function addDays(date, days) {
     let getNewDate = new Date(date);
     const newDate = getNewDate.setDate(getNewDate.getDate() + days);
-    germanDateOutput(newDate);
+    germanDateOutput(newDate)
 }
 
 // Handle initial Court setup
