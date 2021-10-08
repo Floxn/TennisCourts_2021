@@ -6,7 +6,7 @@ let tennisFacility = [];
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
 
 // Bootstrap Modal
-var newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+const newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
 // set the focus to the firstname on show.bs.modal event
 const theModal = document.getElementById('staticBackdrop');
 theModal.addEventListener('show.bs.modal', event => {
@@ -288,8 +288,8 @@ document.body.addEventListener('keypress', event => {
 });
 
 // Handle the Modal input
-const addPlayerButtons = document.querySelector('[data-confirm-player]');
-addPlayerButtons.addEventListener('click', addPlayerToSlot);
+const confirmPlayerButton = document.querySelector('[data-confirm-player]');
+confirmPlayerButton.addEventListener('click', addPlayerToSlot);
 
 // Make input submit with the enter key
 const playerFirstnameInput = document.querySelector('[data-player-firstname]');
