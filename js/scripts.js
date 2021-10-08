@@ -263,6 +263,33 @@ function addDays(date, days) {
     germanDateOutput(newDate);
 }
 
+// Handle initial Court setup
+document.querySelector('#initialCourtSetup .btn').addEventListener('click', howManyCourts);
+
+const courtNumberInput = document.querySelector('#howManyCourts');
+document.body.addEventListener('keypress', event => {
+    if (event.key === 'Enter') {
+        if (event.target !== courtNumberInput) {
+            return
+        }
+        howManyCourts();
+    }
+});
+
+// Handle the Modal input
 const addPlayerButtons = document.querySelector('[data-confirm-player]');
 addPlayerButtons.addEventListener('click', addPlayerToSlot);
-document.querySelector('#initialCourtSetup .btn').addEventListener('click', howManyCourts);
+
+// Make input submit with the enter key
+const playerFirstnameInput = document.querySelector('[data-player-firstname]');
+const playerLastnameInput = document.querySelector('[data-player-lastname]');
+
+document.body.addEventListener('keypress', event => {
+    if(event.key === 'Enter') {
+        // TODO implement set focus to empty input on press enter before submit
+        if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
+            return
+        }
+        addPlayerToSlot();
+    }
+})
