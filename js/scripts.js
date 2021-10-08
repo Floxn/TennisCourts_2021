@@ -5,7 +5,19 @@
 let tennisFacility = [];
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
 
-var theModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+// Bootstrap Modal
+var newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+// set the focus to the firstname on show.bs.modal event
+const theModal = document.getElementById('staticBackdrop');
+theModal.addEventListener('show.bs.modal', event => {
+    const firstnameInput = theModal.querySelector('[data-player-firstname]');
+    // timeout is needed to begin after the fade in of the modal
+    setTimeout( () => {
+        firstnameInput.focus();
+    }, 1)
+})
+
+// gloabl element selector
 const facility = document.getElementById("tennisFacility");
 
 //// BUILD OBJECTS
@@ -219,7 +231,7 @@ function removePlayerFromTimeSlot() {
 function closeModal() {
     document.querySelector('[data-player-firstname]').value = '';
     document.querySelector('[data-player-lastname]').value = '';
-    theModal.hide();
+    newModal.hide();
 }
 
 function addPlayerButtonEventListener() {
@@ -238,9 +250,8 @@ function removePlayerButtonEventListener() {
     }
 }
 
-
+// not yet in use but need for Weekly View
 getNextSevenDates();
-
 function getNextSevenDates() {
     const currentDate = new Date();
     germanDateOutput(currentDate);
@@ -283,11 +294,17 @@ addPlayerButtons.addEventListener('click', addPlayerToSlot);
 // Make input submit with the enter key
 const playerFirstnameInput = document.querySelector('[data-player-firstname]');
 const playerLastnameInput = document.querySelector('[data-player-lastname]');
-
 document.body.addEventListener('keypress', event => {
     if(event.key === 'Enter') {
-        // TODO implement set focus to empty input on press enter before submit
         if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
+            return
+        }
+        if (event.target === playerLastnameInput && playerFirstnameInput.value === '') {
+            playerFirstnameInput.focus();
+            return
+        }
+        if (event.target === playerFirstnameInput && playerLastnameInput.value === '') {
+            playerLastnameInput.focus();
             return
         }
         addPlayerToSlot();

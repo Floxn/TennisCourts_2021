@@ -14,11 +14,12 @@ h2 {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    max-width: 500px;
+    max-width: 60ch;
     margin: 0 auto;
 }
 #initialCourtSetup .h1 {
     font-size: 5rem;
+    text-align: center;
 }
 #initialCourtSetup .form-group {
     display: flex;
