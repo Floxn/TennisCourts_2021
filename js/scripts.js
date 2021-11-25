@@ -66,11 +66,11 @@ function addNewCourt(numberOfCourts) {
         // add the timeslots to the court
         let begin = 7;
         for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
-            let slot = 'timeSlot-' + timeSlots;
-            let beginTime = begin + ':00 Uhr';
-            let endTime = (begin + 1) + ':00 Uhr';
+            let slot = `timeSlot-${timeSlots}`;
+            let beginTime = `${begin}:00 Uhr`;
+            let endTime = `${begin + 1}:00 Uhr`;
             newCourt.timeSlots[slot] = {
-                'time': beginTime + ' - ' + endTime,
+                'time': `${beginTime} - ${endTime}`,
                 'players': {}
             };
             begin += 1;
@@ -84,10 +84,10 @@ function addNewCourt(numberOfCourts) {
 }
 
 function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
-    const container = document.querySelector('[data-court="' + courtNumber + '"]')
+    const container = document.querySelector(`[data-court="${courtNumber}"]`)
     const theSlot = container.querySelector('.court-slots');
 
-    const slotNumberClass = 'time-slot-' + slotNumber;
+    const slotNumberClass = `time-slot-${slotNumber}`;
 
     newSlot = document.createElement('div');
     newSlot.classList.add('time-slot', slotNumberClass);
@@ -113,7 +113,7 @@ function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
 
     // Build add Player Button
     addPlayerButton = document.createElement('button');
-    addPlayerButton.classList.add('add-player', 'btn', 'btn-sm', 'btn-outline-success', 'add-player-' + slotNumberClass);
+    addPlayerButton.classList.add('add-player', 'btn', 'btn-sm', 'btn-outline-success', `add-player-${slotNumberClass}`);
     setAttributes(addPlayerButton, {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'})
     addPlayerButton.textContent = 'add new Player';
 
@@ -131,7 +131,7 @@ function setAttributes(element, attributes) {
 }
 
 function buildCourtHTML(courtNumber) {
-    const courtNumberClass = 'court-' + courtNumber;
+    const courtNumberClass = `court-${courtNumber}`;
 
     // Build Court Wrapper
     newCourt = document.createElement('div');
@@ -141,7 +141,7 @@ function buildCourtHTML(courtNumber) {
 
     // Build Court Headline
     courtHeadline = document.createElement('h2');
-    courtHeadline.textContent = 'Court-No: ' + courtNumber;
+    courtHeadline.textContent = `Court-No: ${courtNumber}`;
 
     // Build Timeslots Wrapper
     courtTimeSlots = document.createElement('div');
@@ -157,7 +157,7 @@ function buildPlayerHTML(playerFirstname, playerLastname, playerNumber) {
     newPlayerElement = document.createElement('div');
     newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
     newPlayerElement.setAttribute('data-player', playerNumber);
-    newPlayerElement.textContent = playerFirstname + ' ' + playerLastname;
+    newPlayerElement.textContent = `${playerFirstname} ${playerLastname}`;
 
     removeButton = document.createElement('button');
     removeButton.classList.add('remove-player', 'btn', 'btn-danger');
@@ -234,7 +234,7 @@ function removePlayerFromTimeSlot() {
     const courtData = parseInt(this.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('data-court'));
 
     const currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
-    const currentTimeSlot = currentCourt.timeSlots['timeSlot-' + slotData];
+    const currentTimeSlot = currentCourt.timeSlots[`timeSlot-${slotData}`];
 
     // delete the player
     delete currentTimeSlot.players[currentPlayersId];
@@ -274,7 +274,7 @@ function getNextSevenDates() {
     let allDates = new DatesOfOneWeek(fullDate)
     for (let days = 0; days <= 6; days++) {
         addDays(currentDate, days);
-        allDates['date-' + ( days+1 )] = fullDate;
+        allDates[`date-${days + 1}`] = fullDate;
     }
     tennisFacility.push(allDates);
     console.log(tennisFacility);
@@ -285,7 +285,7 @@ function germanDateOutput(date) {
     const day = thisDate.getDate();
     const month = (thisDate.getMonth() + 1);
     const year = thisDate.getFullYear();
-    return fullDate = day + '.' + month + '.' + year;
+    return fullDate = `${day}.${month}.${year}`;
 }
 
 function addDays(date, days) {
