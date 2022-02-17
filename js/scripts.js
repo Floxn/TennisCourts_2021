@@ -3,7 +3,7 @@
 // TODO next: Move every Day of the Week in one Tab
 // TODO next next :) : Include Database
 
-const tennisFacility = {};
+let tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
 
 // Bootstrap Modal
@@ -334,4 +334,17 @@ document.body.addEventListener('keypress', event => {
         }
         addPlayerToSlot();
     }
+})
+
+// Save to local Storage
+const saveButton = document.querySelector('#saveData');
+saveButton.addEventListener('click', () => {
+    localStorage.setItem('tennisFacility', JSON.stringify(tennisFacility));
+})
+
+// Load data from local Storage
+const loadButton = document.querySelector('#loadData');
+loadButton.addEventListener('click', () => {
+    tennisFacility = localStorage.getItem('tennisFacility');
+    console.log(JSON.parse(tennisFacility));
 })
