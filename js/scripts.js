@@ -3,7 +3,7 @@
 // TODO next: Move every Day of the Week in one Tab
 // TODO next next :) : Include Database
 
-let tennisFacility = [];
+const tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
 
 // Bootstrap Modal
@@ -61,7 +61,8 @@ function addNewCourt(numberOfCourts) {
     for (let courtNumber = 1; courtNumber <= numberOfCourts; courtNumber++) {
 
         buildCourtHTML(courtNumber);
-        let newCourt = new Court(tennisFacility.length + 1);
+        let currentCourt = Object.keys(tennisFacility).length + 1;
+        let newCourt = new Court(currentCourt);
 
         // add the timeslots to the court
         let begin = 7;
@@ -76,8 +77,9 @@ function addNewCourt(numberOfCourts) {
             begin += 1;
             buildSlotHTML(courtNumber, timeSlots, beginTime, endTime);
         }
-
-        tennisFacility.push(newCourt);
+        tennisFacility[`court-${currentCourt}`] = newCourt;
+        //tennisFacility.push(newCourt);
+        console.log(tennisFacility);
     }
 
     addPlayerButtonEventListener();
@@ -173,6 +175,7 @@ function getGlobalData() {
 }
 
 function addPlayerToSlot() {
+    console.log(Object.values(tennisFacility[`court-${globalCourtData}`]));
 
     // get first and lastname input value
     let playerFirstname = document.querySelector('[data-player-firstname]').value;
@@ -196,17 +199,22 @@ function addPlayerToSlot() {
     // write new Player Object
     const newPlayer = new Player(playerFirstname, playerLastname);
 
+    const slotPlayers = tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players;
+
     // find the correct Court object
-    const currentCourt = tennisFacility.find(Court => Court.courtNumber === globalCourtData);
-    const currentTimeSlot = currentCourt.timeSlots['timeSlot-' + globalSlotData];
-
-    // get length of Players Object in the current court
-    const courtPlayerLength = Object.keys(currentTimeSlot.players).length + 1;
-
+    const courtPlayerLength = Object.keys(slotPlayers).length + 1;
     playerNumber = 'player-' + courtPlayerLength;
 
     // add new Player to the current timeSlot
-    currentTimeSlot.players[playerNumber] = newPlayer;
+    for (player in slotPlayers) {
+        while(player === playerNumber) {
+            console.log('Name gibts schon')
+            player.replace()
+            console.log()
+            return playerNumber = 'player-xxx'
+        }
+    }
+    tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players[playerNumber] = newPlayer;
 
     // add Player to HTML
     buildPlayerHTML(playerFirstname, playerLastname, playerNumber);
@@ -233,11 +241,8 @@ function removePlayerFromTimeSlot() {
     const slotData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-time-slot'));
     const courtData = parseInt(this.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('data-court'));
 
-    const currentCourt = tennisFacility.find(Court => Court.courtNumber === courtData);
-    const currentTimeSlot = currentCourt.timeSlots[`timeSlot-${slotData}`];
-
     // delete the player
-    delete currentTimeSlot.players[currentPlayersId];
+    delete tennisFacility[`court-${courtData}`].timeSlots[`timeSlot-${slotData}`].players[currentPlayersId];
 
     // delete html player element
     parent.parentNode.removeChild(this.parentNode);
@@ -276,7 +281,7 @@ function getNextSevenDates() {
         addDays(currentDate, days);
         allDates[`date-${days + 1}`] = fullDate;
     }
-    tennisFacility.push(allDates);
+    tennisFacility.oneWeek = allDates;
     console.log(tennisFacility);
 }
 
