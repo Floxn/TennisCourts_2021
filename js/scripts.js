@@ -36,11 +36,11 @@ function Court(courtNumber) {
     this.timeSlots = {};
 }
 
-function DatesOfOneWeek() {
+function DatesOfOneWeek ()  {
 }
 
 // Check how many Court the Facility have
-function howManyCourts() {
+const howManyCourts = () => {
     let numberOfCourts = document.querySelector('#howManyCourts').value
     if (numberOfCourts <= 1 || numberOfCourts >= 21) {
         return
@@ -52,12 +52,12 @@ function howManyCourts() {
     getNextSevenDates();
 }
 
-function deleteHowManyCourtsInput() {
+const deleteHowManyCourtsInput = () => {
     document.body.removeChild(document.querySelector('#initialCourtSetup'));
 }
 
 // add the Courts to the facility
-function addNewCourt(numberOfCourts) {
+const addNewCourt = (numberOfCourts) => {
     for (let courtNumber = 1; courtNumber <= numberOfCourts; courtNumber++) {
 
         buildCourtHTML(courtNumber);
@@ -85,7 +85,7 @@ function addNewCourt(numberOfCourts) {
     addPlayerButtonEventListener();
 }
 
-function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
+const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
     const container = document.querySelector(`[data-court="${courtNumber}"]`)
     const theSlot = container.querySelector('.court-slots');
 
@@ -126,13 +126,13 @@ function buildSlotHTML(courtNumber, slotNumber, beginTime, endTime) {
 }
 
 // Helper functions
-function setAttributes(element, attributes) {
+const setAttributes = (element, attributes) => {
     for (let key in attributes) {
         element.setAttribute(key, attributes[key]);
     }
 }
 
-function buildCourtHTML(courtNumber) {
+const buildCourtHTML = (courtNumber) => {
     const courtNumberClass = `court-${courtNumber}`;
 
     // Build Court Wrapper
@@ -154,7 +154,7 @@ function buildCourtHTML(courtNumber) {
     newCourt.appendChild(courtTimeSlots);
 }
 
-function buildPlayerHTML(playerFirstname, playerLastname, playerNumber) {
+const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber) => {
     // build new players element and append it
     newPlayerElement = document.createElement('div');
     newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
@@ -167,14 +167,14 @@ function buildPlayerHTML(playerFirstname, playerLastname, playerNumber) {
     newPlayerElement.appendChild(removeButton);
 }
 
-function getGlobalData() {
+function getGlobalData () {
     // write data to global variables
     globalClickedTimeSlot = this;
     globalSlotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
     globalCourtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
 }
 
-function addPlayerToSlot() {
+const addPlayerToSlot = () => {
     console.log(Object.values(tennisFacility[`court-${globalCourtData}`]));
 
     // get first and lastname input value
@@ -234,7 +234,7 @@ function addPlayerToSlot() {
     console.log(tennisFacility);
 }
 
-function removePlayerFromTimeSlot() {
+function removePlayerFromTimeSlot () {
     // find the correct player object at the correct position in object and delete it
     const parent = this.parentNode;
     const currentPlayersId = parent.getAttribute('data-player');
@@ -251,13 +251,13 @@ function removePlayerFromTimeSlot() {
     console.log(tennisFacility);
 }
 
-function closeModal() {
+const closeModal = () => {
     document.querySelector('[data-player-firstname]').value = '';
     document.querySelector('[data-player-lastname]').value = '';
     newModal.hide();
 }
 
-function addPlayerButtonEventListener() {
+const addPlayerButtonEventListener = () => {
     let addPlayerButtons = document.querySelectorAll('.add-player');
 
     for (let i = 0; i < addPlayerButtons.length; i++) {
@@ -265,7 +265,7 @@ function addPlayerButtonEventListener() {
     }
 }
 
-function removePlayerButtonEventListener() {
+const removePlayerButtonEventListener = () => {
     let removePlayerButtons = document.querySelectorAll('.remove-player');
 
     for (let i = 0; i < removePlayerButtons.length; i++) {
@@ -273,7 +273,7 @@ function removePlayerButtonEventListener() {
     }
 }
 
-function getNextSevenDates() {
+const getNextSevenDates = () => {
     const currentDate = new Date();
     germanDateOutput(currentDate);
     let allDates = new DatesOfOneWeek(fullDate)
@@ -285,15 +285,16 @@ function getNextSevenDates() {
     console.log(tennisFacility);
 }
 
-function germanDateOutput(date) {
+const germanDateOutput = date => {
     const thisDate = new Date(date);
     const day = thisDate.getDate();
     const month = (thisDate.getMonth() + 1);
     const year = thisDate.getFullYear();
+
     return fullDate = `${day}.${month}.${year}`;
 }
 
-function addDays(date, days) {
+const addDays = (date, days) => {
     let getNewDate = new Date(date);
     const newDate = getNewDate.setDate(getNewDate.getDate() + days);
     germanDateOutput(newDate)
