@@ -1,6 +1,8 @@
 // TODO next: Check if player id is already exists in court and time slot
+// TODO next: rewrite to add new player int players
 // TODO next: Weekly View
 // TODO next: Move every Day of the Week in one Tab
+// TODO next: change eventhandler from click or touch to pointerEvents
 // TODO next next :) : Include Database
 
 let tennisFacility = {};
@@ -18,7 +20,7 @@ theModal.addEventListener('show.bs.modal', event => {
     }, 1)
 })
 
-// gloabl element selector
+// global element selector
 const facility = document.getElementById("tennisFacility");
 
 //// BUILD OBJECTS
@@ -175,8 +177,6 @@ function getGlobalData () {
 }
 
 const addPlayerToSlot = () => {
-    console.log(Object.values(tennisFacility[`court-${globalCourtData}`]));
-
     // get first and lastname input value
     let playerFirstname = document.querySelector('[data-player-firstname]').value;
     let playerLastname = document.querySelector('[data-player-lastname]').value;
@@ -197,23 +197,29 @@ const addPlayerToSlot = () => {
         }
     }
     // write new Player Object
+    // TODO have to rewrite to add the player object into a array of players to easier push and pop player
     const newPlayer = new Player(playerFirstname, playerLastname);
 
     const slotPlayers = tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players;
+    console.log('slotPlayers', slotPlayers);
 
     // find the correct Court object
-    const courtPlayerLength = Object.keys(slotPlayers).length + 1;
-    playerNumber = 'player-' + courtPlayerLength;
+    // const courtPlayerLength = Object.keys(slotPlayers).length + 1;
+    let playerNumber =  Object.keys(slotPlayers).length;
+    console.log('playerNumber', playerNumber)
 
+/*
     // add new Player to the current timeSlot
     for (player in slotPlayers) {
-        while(player === playerNumber) {
-            console.log('Name gibts schon')
-            player.replace()
-            console.log()
-            return playerNumber = 'player-xxx'
-        }
+        console.log('for loop', player, playerNumber)
+        console.log('for loop playerNumber', playerNumber)
+        do {
+            console.log('for while loop', playerNumber)
+            playerNumber++;
+            console.log('for while loop', playerNumber)
+        } while (player === playerNumber || playerNumber === 0)
     }
+*/
     tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players[playerNumber] = newPlayer;
 
     // add Player to HTML
