@@ -72,13 +72,26 @@ export const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
     // Build add Player Button
     const addPlayerButton = document.createElement('button');
     addPlayerButton.classList.add('add-player', 'btn', 'btn-sm', 'btn-outline-success', `add-player-${slotNumberClass}`);
-    setAttributes(addPlayerButton, {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'})
+    setAttributes(addPlayerButton, {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'});
     addPlayerButton.textContent = 'add new Player';
 
     theSlot.appendChild(newSlot);
     newSlot.appendChild(slotTime);
     newSlot.appendChild(slotPlayer);
     newSlot.appendChild(addPlayerButton);
+}
+
+export const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber) => {
+    // build new players element and append it
+    const newPlayerElement = document.createElement('div');
+    newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
+    newPlayerElement.setAttribute('data-player', playerNumber);
+    newPlayerElement.textContent = `${playerFirstname} ${playerLastname}`;
+
+    const removeButton = document.createElement('button');
+    removeButton.classList.add('remove-player', 'btn', 'btn-danger');
+    removeButton.textContent = 'x';
+    newPlayerElement.appendChild(removeButton);
 }
 
 /*

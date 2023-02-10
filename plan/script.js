@@ -4,7 +4,7 @@
 // TODO next: Move every Day of the Week in one Tab
 // TODO next: change eventhandler from click or touch to pointerEvents
 // TODO next next :) : Include Database
-import {buildCourtHTML, buildSlotHTML} from "./template.js";
+import {buildCourtHTML, buildSlotHTML, buildPlayerHTML} from "./template.js";
 
 let tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
@@ -42,16 +42,12 @@ function Court(courtNumber) {
     this.timeSlots = {};
 }
 
-function DatesOfOneWeek ()  {
-}
-
 // Check how many Court the Facility have
 
 // Function expression
 const init = () => {
     let params = (new URL(location)).searchParams;
-    let numberOfCourts = parseInt(params.get('courts')); // is the number 18
-    console.log(numberOfCourts)
+    let numberOfCourts = parseInt(params.get('courts'));
 
     if (numberOfCourts <= 1 || numberOfCourts >= 21) {
         return
@@ -91,20 +87,6 @@ const addNewCourt = (numberOfCourts) => {
     }
 
     addPlayerButtonEventListener();
-}
-
-
-const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber) => {
-    // build new players element and append it
-    const newPlayerElement = document.createElement('div');
-    newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
-    newPlayerElement.setAttribute('data-player', playerNumber);
-    newPlayerElement.textContent = `${playerFirstname} ${playerLastname}`;
-
-    const removeButton = document.createElement('button');
-    removeButton.classList.add('remove-player', 'btn', 'btn-danger');
-    removeButton.textContent = 'x';
-    newPlayerElement.appendChild(removeButton);
 }
 
 function getGlobalData () {
@@ -231,6 +213,7 @@ const getNextSevenDates = () => {
 }
 */
 
+/*
 const germanDateOutput = date => {
     const thisDate = new Date(date);
     const day = thisDate.getDate();
@@ -239,12 +222,15 @@ const germanDateOutput = date => {
 
     return `${day}.${month}.${year}`;
 }
+*/
 
+/*
 const addDays = (date, days) => {
     let getNewDate = new Date(date);
     const newDate = getNewDate.setDate(getNewDate.getDate() + days);
     germanDateOutput(newDate)
 }
+*/
 
 // Handle the Modal input
 const confirmPlayerButton = document.querySelector('[data-confirm-player]');
