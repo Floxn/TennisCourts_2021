@@ -6,6 +6,7 @@
 // TODO next next :) : Include Database
 import {buildCourtHTML, buildSlotHTML, buildPlayerHTML} from "./template.js";
 import {closeModal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
+import {getNextSevenDates} from "./date.js";
 
 let tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
@@ -46,7 +47,7 @@ const init = () => {
 
 /*
     // not yet in use but need for Weekly View
-    getNextSevenDates();
+    getNextSevenDates(tennisFacility);
 */
 }
 
@@ -181,39 +182,6 @@ const removePlayerButtonEventListener = () => {
         removePlayerButtons[i].addEventListener('click', removePlayerFromTimeSlot);
     }
 }
-
-/*
-const getNextSevenDates = () => {
-    const currentDate = new Date();
-    germanDateOutput(currentDate);
-    let allDates = new DatesOfOneWeek(fullDate)
-    for (let days = 0; days <= 6; days++) {
-        addDays(currentDate, days);
-        allDates[`date-${days + 1}`] = fullDate;
-    }
-    tennisFacility.oneWeek = allDates;
-    console.log(tennisFacility);
-}
-*/
-
-/*
-const germanDateOutput = date => {
-    const thisDate = new Date(date);
-    const day = thisDate.getDate();
-    const month = (thisDate.getMonth() + 1);
-    const year = thisDate.getFullYear();
-
-    return `${day}.${month}.${year}`;
-}
-*/
-
-/*
-const addDays = (date, days) => {
-    let getNewDate = new Date(date);
-    const newDate = getNewDate.setDate(getNewDate.getDate() + days);
-    germanDateOutput(newDate)
-}
-*/
 
 // Handle the Modal input
 const confirmPlayerButton = document.querySelector('[data-confirm-player]');
