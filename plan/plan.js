@@ -1,12 +1,14 @@
+// TODO mentoring: Move Function confirmPlayerButton and below from here to modal.js, how can i handle with the function call addPlayerToSlot in the modal.js
+
 // TODO next: Check if player id is already exists in court and time slot
-// TODO next: rewrite to add new player int players
+// TODO next: rewrite to add new player into players
 // TODO next: Weekly View
 // TODO next: Move every Day of the Week in one Tab
 // TODO next: change eventhandler from click or touch to pointerEvents
 // TODO next next :) : Include Database
-import {buildCourtHTML, buildSlotHTML, buildPlayerHTML} from "./template.js";
+import {buildCourtHTML, buildPlayerHTML, addSlotsToCourt} from "./template.js";
 import {closeModal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
-import {getNextSevenDates} from "./date.js";
+import {getNextSevenDates} from "./date.js"; // not used yet
 
 let tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
@@ -21,18 +23,6 @@ function Player(firstname, lastname) {
     this.firstname = firstname;
     this.lastname = lastname;
 }
-
-// Object to build a Tennis Court
-// On one court it is possible to enter 4 player
-
-// Court()
-// Function declaration
-function Court(courtNumber) {
-    this.courtNumber = courtNumber;
-    this.timeSlots = {};
-}
-
-// Check how many Court the Facility have
 
 // Function expression
 const init = () => {
@@ -54,27 +44,9 @@ const init = () => {
 // add the Courts to the facility
 const addNewCourt = (numberOfCourts) => {
     for (let courtNumber = 1; courtNumber <= numberOfCourts; courtNumber++) {
-
         buildCourtHTML(courtNumber, facility);
         let currentCourt = Object.keys(tennisFacility).length + 1;
-        let newCourt = new Court(currentCourt);
-
-        // add the timeslots to the court
-        let begin = 7;
-        for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
-            let slot = `timeSlot-${timeSlots}`;
-            let beginTime = `${begin}:00 Uhr`;
-            let endTime = `${begin + 1}:00 Uhr`;
-            newCourt.timeSlots[slot] = {
-                'time': `${beginTime} - ${endTime}`,
-                'players': {}
-            };
-            begin += 1;
-            buildSlotHTML(courtNumber, timeSlots, beginTime, endTime);
-        }
-        tennisFacility[`court-${currentCourt}`] = newCourt;
-        //tennisFacility.push(newCourt);
-        console.log(tennisFacility);
+        addSlotsToCourt(tennisFacility, courtNumber, currentCourt)
     }
 
     addPlayerButtonEventListener();

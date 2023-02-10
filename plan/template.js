@@ -41,7 +41,7 @@ export const buildCourtHTML = (courtNumber, facility) => {
     newCourt.appendChild(courtTimeSlots);
 }
 
-export const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
+const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
     const container = document.querySelector(`[data-court="${courtNumber}"]`)
     const theSlot = container.querySelector('.court-slots');
 
@@ -79,6 +79,35 @@ export const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
     newSlot.appendChild(slotTime);
     newSlot.appendChild(slotPlayer);
     newSlot.appendChild(addPlayerButton);
+}
+
+export const addSlotsToCourt = (tennisFacility, courtNumber) => {
+
+    // Court()
+    // Function declaration
+    function Court(courtNumber) {
+        this.courtNumber = courtNumber;
+        this.timeSlots = {};
+    }
+
+    let currentCourt = Object.keys(tennisFacility).length + 1;
+    let newCourt = new Court(currentCourt);
+
+    // add the timeslots to the court
+    let begin = 7;
+    for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
+        let slot = `timeSlot-${timeSlots}`;
+        let beginTime = `${begin}:00 Uhr`;
+        let endTime = `${begin + 1}:00 Uhr`;
+        newCourt.timeSlots[slot] = {
+            'time': `${beginTime} - ${endTime}`,
+            'players': {}
+        };
+        begin += 1;
+        buildSlotHTML(courtNumber, timeSlots, beginTime, endTime);
+    }
+    tennisFacility[`court-${currentCourt}`] = newCourt;
+    //tennisFacility.push(newCourt);
 }
 
 export const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber, globalClickedTimeSlot) => {
