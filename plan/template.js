@@ -81,7 +81,7 @@ export const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
     newSlot.appendChild(addPlayerButton);
 }
 
-export const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber) => {
+export const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber, globalClickedTimeSlot) => {
     // build new players element and append it
     const newPlayerElement = document.createElement('div');
     newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
@@ -92,6 +92,9 @@ export const buildPlayerHTML = (playerFirstname, playerLastname, playerNumber) =
     removeButton.classList.add('remove-player', 'btn', 'btn-danger');
     removeButton.textContent = 'x';
     newPlayerElement.appendChild(removeButton);
+
+    globalClickedTimeSlot.previousElementSibling.appendChild(newPlayerElement);
+
 }
 
 /*

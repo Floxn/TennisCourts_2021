@@ -143,8 +143,7 @@ const addPlayerToSlot = () => {
     tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players[playerNumber] = newPlayer;
 
     // add Player to HTML
-    buildPlayerHTML(playerFirstname, playerLastname, playerNumber);
-    globalClickedTimeSlot.previousElementSibling.appendChild(newPlayerElement);
+    buildPlayerHTML(playerFirstname, playerLastname, playerNumber, globalClickedTimeSlot);
 
     closeModal();
 
