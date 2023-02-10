@@ -5,21 +5,10 @@
 // TODO next: change eventhandler from click or touch to pointerEvents
 // TODO next next :) : Include Database
 import {buildCourtHTML, buildSlotHTML, buildPlayerHTML} from "./template.js";
+import {closeModal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
 
 let tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
-
-// Bootstrap Modal
-const newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-// set the focus to the firstname on show.bs.modal event
-const theModal = document.getElementById('staticBackdrop');
-theModal.addEventListener('show.bs.modal', event => {
-    const firstnameInput = theModal.querySelector('[data-player-firstname]');
-    // timeout is needed to begin after the fade in of the modal
-    setTimeout( () => {
-        firstnameInput.focus();
-    }, 1)
-})
 
 // global element selector
 const facility = document.getElementById("tennisFacility");
@@ -53,6 +42,7 @@ const init = () => {
         return
     }
     addNewCourt(numberOfCourts);
+    modalSetFocusToFirstnameOnOpen();
 
 /*
     // not yet in use but need for Weekly View
@@ -174,12 +164,6 @@ function removePlayerFromTimeSlot () {
 
     // TODO remove console log
     console.log(tennisFacility);
-}
-
-const closeModal = () => {
-    document.querySelector('[data-player-firstname]').value = '';
-    document.querySelector('[data-player-lastname]').value = '';
-    newModal.hide();
 }
 
 const addPlayerButtonEventListener = () => {
