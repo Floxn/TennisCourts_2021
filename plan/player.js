@@ -13,7 +13,7 @@ const removePlayerButtonEventListener = (tennisFacility) => {
 
 function removePlayerFromTimeSlot (tennisFacility) {
     // find the correct player object at the correct position in object and delete it
-    const parent = this.parentNode; // TODO this is not working anymore?
+    const parent = this.parentNode; // TODO Mentoring: das tut nun nicht mehr?
     const currentPlayersId = parent.getAttribute('data-player');
     const slotData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-time-slot'));
     const courtData = parseInt(this.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('data-court'));

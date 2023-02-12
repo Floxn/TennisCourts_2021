@@ -1,8 +1,15 @@
-export const modal = () => {
+import {addPlayerToSlot} from "./player.js";
 
+
+// TODO Mentoring: modal() läuft noch nicht korrekt
+export const modal = (tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot) => {
+
+    console.log('gloablSlotData' + globalSlotData)
 // Handle the Modal input
     const confirmPlayerButton = document.querySelector('[data-confirm-player]');
-    confirmPlayerButton.addEventListener('click', addPlayerToSlot);
+    confirmPlayerButton.addEventListener('click', () => {
+        addPlayerToSlot(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot)
+    });
 
 // Make input submit with the enter key
     const playerFirstnameInput = document.querySelector('[data-player-firstname]');
@@ -20,7 +27,7 @@ export const modal = () => {
                 playerLastnameInput.focus();
                 return
             }
-            addPlayerToSlot();
+            addPlayerToSlot(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot);
         }
     })
 }

@@ -7,9 +7,8 @@
 // TODO next: change eventhandler from click or touch to pointerEvents
 // TODO next next :) : Include Database
 import {buildCourtHTML, addSlotsToCourt} from "./template.js";
-import {modalSetFocusToFirstnameOnOpen} from "./modal.js";
+import {modal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
 import {getNextSevenDates} from "./date.js"; // not used yet
-import {addPlayerToSlot} from "./player.js";
 
 let tennisFacility = {};
 let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
@@ -64,6 +63,9 @@ const addPlayerButtonEventListener = () => {
     }
 }
 
+// TODO Mentoring: Das wird eine Timing sache sein, die mitgegebenen Daten sind nur vom initial load?
+modal(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot);
+/*
 // Handle the Modal input
 const confirmPlayerButton = document.querySelector('[data-confirm-player]');
 confirmPlayerButton.addEventListener('click', () => {
@@ -88,7 +90,7 @@ document.body.addEventListener('keypress', event => {
         }
         addPlayerToSlot(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot);
     }
-})
+})*/
 
 // Save to local Storage
 const saveButton = document.querySelector('#saveData');
