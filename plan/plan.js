@@ -16,10 +16,6 @@ let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
 // global element selector
 const facility = document.getElementById("tennisFacility");
 
-//// BUILD OBJECTS
-////
-// Object to build a Player
-
 // Function expression
 const init = () => {
     let params = (new URL(location)).searchParams;

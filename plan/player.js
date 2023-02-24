@@ -58,6 +58,7 @@ export const addPlayerToSlot = (tennisFacility, globalCourtData, globalSlotData,
     // TODO have to rewrite to add the player object into a array of players to easier push and pop player
     const newPlayer = new Player(playerFirstname, playerLastname);
 
+    // TODO Mentoring - timeSlot is not defined
     const slotPlayers = tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players;
     console.log('slotPlayers', slotPlayers);
 
