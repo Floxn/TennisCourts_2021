@@ -5,31 +5,33 @@ const removePlayerButtonEventListener = (tennisFacility) => {
     let removePlayerButtons = document.querySelectorAll('.remove-player');
 
     for (let i = 0; i < removePlayerButtons.length; i++) {
-        removePlayerButtons[i].addEventListener('click', () => {
-            removePlayerFromTimeSlot(tennisFacility);
+        removePlayerButtons[i].addEventListener('click', (event) => {
+            removePlayerFromTimeSlot(event, tennisFacility);
         });
     }
 }
 
-function removePlayerFromTimeSlot (tennisFacility) {
+function removePlayerFromTimeSlot (event, tennisFacility) {
     // find the correct player object at the correct position in object and delete it
-    const parent = this.parentNode; // TODO Mentoring: das tut nun nicht mehr?
+    const parent = event.target.parentNode;
     const currentPlayersId = parent.getAttribute('data-player');
-    const slotData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-time-slot'));
-    const courtData = parseInt(this.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('data-court'));
+    const slotData = parseInt(parent.parentElement.parentElement.getAttribute('data-time-slot'));
+    const courtData = parseInt(parent.parentElement.parentElement.parentElement.parentElement.getAttribute('data-court'));
 
     // delete the player
     delete tennisFacility[`court-${courtData}`].timeSlots[`timeSlot-${slotData}`].players[currentPlayersId];
 
     // delete html player element
-    parent.parentNode.removeChild(this.parentNode);
+    parent.parentNode.removeChild(parent);
 
     // TODO remove console log
     console.log(tennisFacility);
 }
 
 
-export const addPlayerToSlot = (tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot) => {
+export const addPlayerToSlot = (state) => {
+    const {tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot} = state;
+
     function Player(firstname, lastname) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -87,12 +89,12 @@ export const addPlayerToSlot = (tennisFacility, globalCourtData, globalSlotData,
     closeModal();
 
     // trigger eventListener
-    removePlayerButtonEventListener();
+    removePlayerButtonEventListener(tennisFacility);
 
     // clear global Data
-    globalCourtData
-    globalSlotData
-    globalClickedTimeSlot = '';
+    state.globalCourtData = '';
+    state.globalSlotData = '';
+    state.globalClickedTimeSlot = '';
 
     // TODO remove console log
     console.log(tennisFacility);

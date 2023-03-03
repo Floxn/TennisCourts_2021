@@ -10,8 +10,9 @@ import {buildCourtHTML, addSlotsToCourt} from "./template.js";
 import {modal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
 import {getNextSevenDates} from "./date.js"; // not used yet
 
-let tennisFacility = {};
-let {globalCourtData, globalSlotData, globalClickedTimeSlot} = '';
+let state = {
+    tennisFacility: {}, globalCourtData: undefined, globalSlotData: undefined, globalClickedTimeSlot: ''
+}
 
 // global element selector
 const facility = document.getElementById("tennisFacility");
@@ -26,6 +27,7 @@ const init = () => {
     }
     addNewCourt(numberOfCourts);
     modalSetFocusToFirstnameOnOpen();
+    modal(state);
 
 /*
     // not yet in use but need for Weekly View
@@ -37,6 +39,7 @@ const init = () => {
 const addNewCourt = (numberOfCourts) => {
     for (let courtNumber = 1; courtNumber <= numberOfCourts; courtNumber++) {
         buildCourtHTML(courtNumber, facility);
+        const tennisFacility = state.tennisFacility;
         let currentCourt = Object.keys(tennisFacility).length + 1;
         addSlotsToCourt(tennisFacility, courtNumber, currentCourt)
     }
@@ -46,9 +49,9 @@ const addNewCourt = (numberOfCourts) => {
 
 function getGlobalData () {
     // write data to global variables
-    globalClickedTimeSlot = this;
-    globalSlotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
-    globalCourtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
+    state.globalClickedTimeSlot = this;
+    state.globalSlotData = parseInt(this.parentElement.getAttribute('data-time-slot'));
+    state.globalCourtData = parseInt(this.parentElement.parentElement.parentElement.getAttribute('data-court'));
 }
 
 const addPlayerButtonEventListener = () => {
@@ -60,7 +63,6 @@ const addPlayerButtonEventListener = () => {
 }
 
 // TODO Mentoring: Das wird eine Timing sache sein, die mitgegebenen Daten sind nur vom initial load?
-modal(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot);
 /*
 // Handle the Modal input
 const confirmPlayerButton = document.querySelector('[data-confirm-player]');
@@ -91,14 +93,14 @@ document.body.addEventListener('keypress', event => {
 // Save to local Storage
 const saveButton = document.querySelector('#saveData');
 saveButton.addEventListener('click', () => {
-    localStorage.setItem('tennisFacility', JSON.stringify(tennisFacility));
+    localStorage.setItem('tennisFacility', JSON.stringify(state.tennisFacility));
 })
 
 // Load data from local Storage
 const loadButton = document.querySelector('#loadData');
 loadButton.addEventListener('click', () => {
-    tennisFacility = localStorage.getItem('tennisFacility');
-    console.log(JSON.parse(tennisFacility));
+    state.tennisFacility = localStorage.getItem('tennisFacility');
+    console.log(JSON.parse(state.tennisFacility));
 })
 
 init();

@@ -82,7 +82,6 @@ const buildSlotHTML = (courtNumber, slotNumber, beginTime, endTime) => {
 }
 
 export const addSlotsToCourt = (tennisFacility, courtNumber) => {
-
     // Court()
     // Function declaration
     function Court(courtNumber) {
@@ -94,16 +93,16 @@ export const addSlotsToCourt = (tennisFacility, courtNumber) => {
     let newCourt = new Court(currentCourt);
 
     // add the timeslots to the court
-    let begin = 7;
+    let firstTimeOfTimeslot = 7;
     for (let timeSlots = 1; timeSlots <= 14; timeSlots++) {
         let slot = `timeSlot-${timeSlots}`;
-        let beginTime = `${begin}:00 Uhr`;
-        let endTime = `${begin + 1}:00 Uhr`;
+        let beginTime = `${firstTimeOfTimeslot}:00 Uhr`;
+        let endTime = `${firstTimeOfTimeslot + 1}:00 Uhr`;
         newCourt.timeSlots[slot] = {
             'time': `${beginTime} - ${endTime}`,
             'players': {}
         };
-        begin += 1;
+        firstTimeOfTimeslot += 1;
         buildSlotHTML(courtNumber, timeSlots, beginTime, endTime);
     }
     tennisFacility[`court-${currentCourt}`] = newCourt;
