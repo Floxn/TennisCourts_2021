@@ -1,19 +1,18 @@
 import {addPlayerToSlot} from "./player.js";
 
 
-// TODO Mentoring: modal() läuft noch nicht korrekt
 export const modal = (tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot) => {
 
-    console.log('gloablSlotData' + globalSlotData)
-// Handle the Modal input
+    // Handle the Modal input
     const confirmPlayerButton = document.querySelector('[data-confirm-player]');
     confirmPlayerButton.addEventListener('click', () => {
         addPlayerToSlot(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot)
     });
 
-// Make input submit with the enter key
+    // Make input submit with the enter key
     const playerFirstnameInput = document.querySelector('[data-player-firstname]');
     const playerLastnameInput = document.querySelector('[data-player-lastname]');
+
     document.body.addEventListener('keypress', event => {
         if(event.key === 'Enter') {
             if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
@@ -38,7 +37,6 @@ export const closeModal = () => {
     document.querySelector('[data-player-firstname]').value = '';
     document.querySelector('[data-player-lastname]').value = '';
     newModal.hide();
-    console.log('closed')
 }
 
 export const modalSetFocusToFirstnameOnOpen = () => {

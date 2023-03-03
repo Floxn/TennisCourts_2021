@@ -1,11 +1,10 @@
-// TODO mentoring: Move Function confirmPlayerButton and below from here to modal.js, how can i handle with the function call addPlayerToSlot in the modal.js
-
 // TODO next: Check if player id is already exists in court and time slot
 // TODO next: rewrite to add new player into players
 // TODO next: Weekly View
 // TODO next: Move every Day of the Week in one Tab
 // TODO next: change eventhandler from click or touch to pointerEvents
 // TODO next next :) : Include Database
+
 import {buildCourtHTML, addSlotsToCourt} from "./template.js";
 import {modal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
 import {getNextSevenDates} from "./date.js"; // not used yet
@@ -22,7 +21,7 @@ const init = () => {
     let params = (new URL(location)).searchParams;
     let numberOfCourts = parseInt(params.get('courts'));
 
-    if (numberOfCourts <= 1 || numberOfCourts >= 21) {
+    if (numberOfCourts <= 0 || numberOfCourts >= 21) {
         return
     }
     addNewCourt(numberOfCourts);
@@ -62,34 +61,6 @@ const addPlayerButtonEventListener = () => {
     }
 }
 
-// TODO Mentoring: Das wird eine Timing sache sein, die mitgegebenen Daten sind nur vom initial load?
-/*
-// Handle the Modal input
-const confirmPlayerButton = document.querySelector('[data-confirm-player]');
-confirmPlayerButton.addEventListener('click', () => {
-    addPlayerToSlot(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot)
-});
-
-// Make input submit with the enter key
-const playerFirstnameInput = document.querySelector('[data-player-firstname]');
-const playerLastnameInput = document.querySelector('[data-player-lastname]');
-document.body.addEventListener('keypress', event => {
-    if(event.key === 'Enter') {
-        if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
-            return
-        }
-        if (event.target === playerLastnameInput && playerFirstnameInput.value === '') {
-            playerFirstnameInput.focus();
-            return
-        }
-        if (event.target === playerFirstnameInput && playerLastnameInput.value === '') {
-            playerLastnameInput.focus();
-            return
-        }
-        addPlayerToSlot(tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot);
-    }
-})*/
-
 // Save to local Storage
 const saveButton = document.querySelector('#saveData');
 saveButton.addEventListener('click', () => {
@@ -100,7 +71,6 @@ saveButton.addEventListener('click', () => {
 const loadButton = document.querySelector('#loadData');
 loadButton.addEventListener('click', () => {
     state.tennisFacility = localStorage.getItem('tennisFacility');
-    console.log(JSON.parse(state.tennisFacility));
 })
 
 init();

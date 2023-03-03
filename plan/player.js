@@ -23,9 +23,6 @@ function removePlayerFromTimeSlot (event, tennisFacility) {
 
     // delete html player element
     parent.parentNode.removeChild(parent);
-
-    // TODO remove console log
-    console.log(tennisFacility);
 }
 
 
@@ -62,12 +59,10 @@ export const addPlayerToSlot = (state) => {
 
     // TODO Mentoring - timeSlot is not defined
     const slotPlayers = tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players;
-    console.log('slotPlayers', slotPlayers);
 
     // find the correct Court object
     // const courtPlayerLength = Object.keys(slotPlayers).length + 1;
     let playerNumber =  Object.keys(slotPlayers).length;
-    console.log('playerNumber', playerNumber)
 
     /*
         // add new Player to the current timeSlot
@@ -96,6 +91,4 @@ export const addPlayerToSlot = (state) => {
     state.globalSlotData = '';
     state.globalClickedTimeSlot = '';
 
-    // TODO remove console log
-    console.log(tennisFacility);
 }
