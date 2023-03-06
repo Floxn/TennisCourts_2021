@@ -2,7 +2,7 @@ import {buildPlayerHTML} from "./template.js";
 import {closeModal} from "./modal.js";
 
 const removePlayerButtonEventListener = (tennisFacility) => {
-    let removePlayerButtons = document.querySelectorAll('.remove-player');
+    const removePlayerButtons = document.querySelectorAll('.remove-player');
 
     for (let i = 0; i < removePlayerButtons.length; i++) {
         removePlayerButtons[i].addEventListener('click', (event) => {
@@ -27,6 +27,7 @@ function removePlayerFromTimeSlot (event, tennisFacility) {
 
 
 export const addPlayerToSlot = (state) => {
+    // TODO: Refactor to be more readable
     const {tennisFacility, globalCourtData, globalSlotData, globalClickedTimeSlot} = state;
 
     function Player(firstname, lastname) {
@@ -35,8 +36,8 @@ export const addPlayerToSlot = (state) => {
     }
 
     // get first and lastname input value
-    let playerFirstname = document.querySelector('[data-player-firstname]').value;
-    let playerLastname = document.querySelector('[data-player-lastname]').value;
+    const playerFirstname = document.querySelector('[data-player-firstname]').value;
+    const playerLastname = document.querySelector('[data-player-lastname]').value;
 
     // if one of the inputs is not filled
     if (!playerFirstname || !playerLastname) {
@@ -57,7 +58,6 @@ export const addPlayerToSlot = (state) => {
     // TODO have to rewrite to add the player object into a array of players to easier push and pop player
     const newPlayer = new Player(playerFirstname, playerLastname);
 
-    // TODO Mentoring - timeSlot is not defined
     const slotPlayers = tennisFacility[`court-${globalCourtData}`].timeSlots[`timeSlot-${globalSlotData}`].players;
 
     // find the correct Court object
@@ -84,7 +84,7 @@ export const addPlayerToSlot = (state) => {
     closeModal();
 
     // trigger eventListener
-    removePlayerButtonEventListener(tennisFacility);
+    removePlayerButtonEventListener(tennisFacility); // Todo Mentoring: tut man eventlistener removen?
 
     // clear global Data
     state.globalCourtData = '';

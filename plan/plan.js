@@ -1,3 +1,16 @@
+/*
+## Aufbau soll sein:
+1 Wochenansicht von X Plätzen. Jeder Platz hat Zeitslots zwischen 7:00 Uhr und 21:00 Uhr a 1 Stunde. Jedem Zeitslot können X Spieler hinzugefügt werden.
+Am nächsten Tag fliegt der vorherige Tag heraus und ein weiterer wird nachgerückt. Das soll automatisch passieren.
+Eine Person kann immer nur ein einziges mal in einem Zeitslot stehen.
+
+Eine initiale Konfiguration soll vorhanden sein für:
+- Anzahl der Plätze
+- Anzahl der Timeslots
+- Zeitspanne der Zeitslots
+- Anzahl der maximalen Spieler
+*/
+
 // TODO next: Check if player id is already exists in court and time slot
 // TODO next: rewrite to add new player into players
 // TODO next: Weekly View
@@ -10,7 +23,10 @@ import {modal, modalSetFocusToFirstnameOnOpen} from "./modal.js";
 import {getNextSevenDates} from "./date.js"; // not used yet
 
 let state = {
-    tennisFacility: {}, globalCourtData: undefined, globalSlotData: undefined, globalClickedTimeSlot: ''
+    tennisFacility: {},
+    globalCourtData: undefined,
+    globalSlotData: undefined,
+    globalClickedTimeSlot: ''
 }
 
 // global element selector
