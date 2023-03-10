@@ -84,7 +84,7 @@ export const addPlayerToSlot = (state) => {
     closeModal();
 
     // trigger eventListener
-    removePlayerButtonEventListener(tennisFacility); // Todo Mentoring: tut man eventlistener removen?
+    removePlayerButtonEventListener(tennisFacility);
 
     // clear global Data
     state.globalCourtData = '';
