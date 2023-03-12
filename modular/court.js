@@ -71,7 +71,6 @@ document.body.appendChild(timeslot1.render())
 
 
 const court1 = new Court();
-debugger
 court1.courtNumber = 1;
 court1.timeslot = timeslot1;
 console.log(court1.timeslot)
