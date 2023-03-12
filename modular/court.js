@@ -69,11 +69,11 @@ console.log(timeslot1.player)
 document.body.appendChild(timeslot1.render())
 
 
+for (let i = 0; i < 5; i++) {
+    const court = new Court();
+    court.courtNumber = i;
+    court.timeslot = timeslot1;
 
-const court1 = new Court();
-court1.courtNumber = 1;
-court1.timeslot = timeslot1;
-console.log(court1.timeslot)
-
-
-document.body.appendChild(court1.render())
+    console.log(court.timeslot)
+    document.body.appendChild(court.render())
+}
