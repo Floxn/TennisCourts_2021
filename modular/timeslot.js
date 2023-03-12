@@ -1,5 +1,6 @@
 // TODO WICHTIG modal() heißt nun addPlayer()
 // TODO Löschen der einzelnen Spieler muss noch implementiert werden
+// TODO maximale Anzahl an Player setzen
 
 
 // TODO Mentoring: Warum konnte ich diese Funktion nicht in die Klasse rein schreiben?
@@ -178,15 +179,3 @@ class Timeslot {
         return this.#buildSlotHTML()
     }
 }
-
-const player1 = new Player()
-player1.firstname = "Franz";
-player1.surname = "Müller";
-
-const timeslot = new Timeslot();
-timeslot.begin = '7:00 Uhr';
-timeslot.end = `8:00 Uhr`;
-timeslot.player = player1;
-console.log(timeslot.player)
-
-document.body.appendChild(timeslot.render())
