@@ -1,9 +1,7 @@
-// TODO WICHTIG modal() heißt nun addPlayer()
 // TODO Löschen der einzelnen Spieler muss noch implementiert werden
 // TODO maximale Anzahl an Player setzen
+// TODO beim löschen muss einmal komplett rerendered werden
 
-
-// TODO Mentoring: Warum konnte ich diese Funktion nicht in die Klasse rein schreiben?
 const setAttributes = (element, attributes) => {
     for (let key in attributes) {
         element.setAttribute(key, attributes[key]);
@@ -14,7 +12,7 @@ class Timeslot {
     #begin = "";
     #end = "";
 
-    #player = [];
+    #playerCollection = [];
 
     set begin (begin) {
         if(this.#begin.length === 0) {
@@ -28,17 +26,18 @@ class Timeslot {
         }
     }
 
-    set player (player) {
-        if (this.#player.length <= 3) {
-            this.#player.push(player);
+    set playerToCollection (player) {
+        if (this.#playerCollection.length <= 3) {
+            this.#playerCollection.push(player);
         }
     }
 
-    get player () {
-        if (this.#player.length > 0) {
-            return this.#player
+    get playerCollection () {
+        if (this.#playerCollection.length > 0) {
+            return this.#playerCollection
         }
     }
+
 
     #init() {
         this.#modalSetFocusToFirstnameOnOpen();
@@ -46,10 +45,11 @@ class Timeslot {
 
     #closeModal () {
         // TODO Mentoring: Hier hab ich kein Bootstrap zur Verfügungen, i think
-        // const newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        //  const newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
         document.querySelector('[data-player-firstname]').value = '';
         document.querySelector('[data-player-lastname]').value = '';
         // newModal.hide();
+        document.querySelector('.btn-close').click();
     }
 
     #modalSetFocusToFirstnameOnOpen () {
@@ -66,12 +66,18 @@ class Timeslot {
 
     #newPlayer(playerFirstname, playerLastname) {
         const player = new Player()
+        this.playerToCollection = player;
+
         player.firstname = playerFirstname;
         player.surname = playerLastname;
 
+        const renderedPlayer = player.render();
+
         this.#closeModal();
-        return player.render();
+        return this.render();
     }
+
+
 
     #addPlayer (addPlayerButton) {
 
@@ -160,11 +166,18 @@ class Timeslot {
         addPlayerButton.addEventListener("click", () => {
             // TODO öffne hier das Modal, erstmal fest hier rein und nicht als extra Klasse
             this.#addPlayer(addPlayerButton);
-            console.log("HI" + this.#player[0].surname)
+            console.log("HI" + this.playerCollection[0].surname)
             this.#modalSetFocusToFirstnameOnOpen();
 
             // this.#closeModal(); muss noch irgendwo rein
         })
+
+/*
+        // TODO das hier sollte eigentlich die Slots in den Court packen. Aber wegen der Reihenfolge der Scripts weis natürlich timeslot.js nicht von court.js
+
+        const courtSlots = document.querySelector('.court-slots');
+        courtSlots.appendChild(theSlot);
+*/
 
         allSlots.appendChild(theSlot);
         theSlot.appendChild(slotTime);
@@ -174,8 +187,9 @@ class Timeslot {
         return allSlots
     }
 
-    render () {
+    render (timeSlot) {
+        // timeSlot.innerHTML = "";
         this.#init();
-        return this.#buildSlotHTML()
+        return this.#buildSlotHTML(timeSlot)
     }
 }

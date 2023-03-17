@@ -26,7 +26,7 @@ class Player {
     #removePlayerButtonEventListener () {
         console.log('removePlayerButtonEventListener')
         const removePlayerButtons = document.querySelectorAll('.remove-player');
-
+        console.log(removePlayerButtons)
         for (let i = 0; i < removePlayerButtons.length; i++) {
             removePlayerButtons[i].addEventListener('click', (event) => {
                 console.log('click');
@@ -36,7 +36,6 @@ class Player {
     }
 
     #removePlayerFromTimeSlot (event) {
-        console.log('asdf');
         const parent = event.target.parentNode;
 
         parent.parentNode.removeChild(parent);
@@ -53,7 +52,9 @@ class Player {
         removeButton.textContent = 'x';
         newPlayerElement.appendChild(removeButton);
 
-        this.#removePlayerButtonEventListener();
+        console.log('player builded')
+        // this.#removePlayerButtonEventListener();
+        console.log('remove eventlistener is set')
 
         return newPlayerElement;
     }

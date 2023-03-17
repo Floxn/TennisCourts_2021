@@ -45,10 +45,18 @@ class Court {
         const courtTimeSlots = document.createElement('div');
         courtTimeSlots.classList.add('court-slots');
 
+        this.#buildTimeslotHTML(courtTimeSlots);
+
         newCourt.appendChild(courtHeadline);
         newCourt.appendChild(courtTimeSlots);
 
         return newCourt;
+    }
+
+    #buildTimeslotHTML (courtTimeSlots) {
+        this.#timeslot.forEach(timeSlot => {
+            courtTimeSlots.appendChild(timeSlot.render(timeSlot));
+        })
     }
     
     render () {
