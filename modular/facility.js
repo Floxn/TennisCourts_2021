@@ -10,11 +10,7 @@ class Facility {
     }
 
     #buildFacilityHTML () {
-        const facility = document.createElement('div');
-        facility.id = 'tennisFacility';
-
-        return facility
-
+        return createNewElement('div', ['tennisFacility'], '', {}, 'tennisFacility');
     }
 
     render () {

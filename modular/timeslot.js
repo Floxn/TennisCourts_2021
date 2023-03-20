@@ -2,12 +2,6 @@
 // TODO maximale Anzahl an Player setzen
 // TODO beim löschen muss einmal komplett rerendered werden
 
-const setAttributes = (element, attributes) => {
-    for (let key in attributes) {
-        element.setAttribute(key, attributes[key]);
-    }
-}
-
 class Timeslot {
     #begin = "";
     #end = "";
@@ -64,12 +58,17 @@ class Timeslot {
         })
     }
 
+
+
+
+    // TODO Mentoring: Wie wird der Player hier eingebunden? Benutzt man new Player(), oder schreibt man den Player in die Variable playerCollection und rendert dann den Slot?
+
     #newPlayer(playerFirstname, playerLastname) {
         const player = new Player()
-        this.setPlayerToCollection = player;
-
         player.firstname = playerFirstname;
         player.surname = playerLastname;
+
+        this.setPlayerToCollection = player;
 
         const renderedPlayer = player.render();
 
@@ -133,47 +132,51 @@ class Timeslot {
     }
 
     #buildSlotHTML () {
-        const theSlot = document.createElement('div');
-        theSlot.classList.add('time-slot');
+        const theSlot = createNewElement(
+            'div',
+            ['time-slot']
+        )
 
         // Build Slot Time
-        const slotTime = document.createElement('div');
-        slotTime.classList.add('time-slot-time');
+        const slotTime = createNewElement(
+            'div',
+            ['time-slot-time']
+        )
 
-        const slotTimeBegin = document.createElement('span');
-        slotTimeBegin.classList.add('time-slot-time-begin');
-        slotTimeBegin.textContent = this.#begin;
+        const slotTimeBegin = createNewElement(
+            'span',
+            ['time-slot-time-begin'],
+            this.#begin
+        )
+
+        const slotTimeEnd = createNewElement(
+            'span',
+            ['time-slot-time-end'],
+            this.#end
+        )
+
         slotTime.appendChild(slotTimeBegin);
-
-        const slotTimeEnd = document.createElement('span');
-        slotTimeEnd.classList.add('time-slot-time-end');
-        slotTimeEnd.textContent = this.#end;
         slotTime.appendChild(slotTimeEnd);
 
         // Build Player Wrapper
         // TODO so oft rendern wie Player vorhanden sind
-        const slotPlayer = document.createElement('div');
-        slotPlayer.classList.add('time-slot-players');
+        const slotPlayer = createNewElement(
+            'div',
+            ['time-slot-players']
+        )
 
         // Build add Player Button
-        const addPlayerButton = document.createElement('button');
-        addPlayerButton.classList.add('add-player', 'btn', 'btn-sm', 'btn-outline-success');
-        setAttributes(addPlayerButton, {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'});
-        addPlayerButton.textContent = 'add new Player';
+        const addPlayerButton = createNewElement(
+            'button',
+            ['add-player', 'btn', 'btn-sm', 'btn-outline-success'],
+            'add new Player',
+            {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'}
+        );
 
         addPlayerButton.addEventListener("click", () => {
             // TODO öffne hier das Modal, erstmal fest hier rein und nicht als extra Klasse
             this.#addPlayer(addPlayerButton);
-
-            // this.#closeModal(); muss noch irgendwo rein
         })
-
-/*
-        // TODO das hier sollte eigentlich die Slots in den Court packen. Aber wegen der Reihenfolge der Scripts weis natürlich timeslot.js nicht von court.js
-
-        const courtSlots = document.querySelector('.court-slots');
-        courtSlots.appendChild(theSlot);
-*/
 
         theSlot.appendChild(slotTime);
         theSlot.appendChild(slotPlayer);

@@ -4,26 +4,27 @@
 class Player {
     #firstname = "";
     #surname = "";
+    #fullname = "";
 
-    set firstname (firstname) {
+    set firstname(firstname) {
         if (this.#firstname.length === 0) {
             this.#firstname = firstname;
         }
     }
 
-    set surname (surname) {
+    set surname(surname) {
         if (this.#surname.length === 0) {
             this.#surname = surname;
         }
     }
 
-    get surname () {
+    get surname() {
         if (this.#surname.length > 0) {
             return this.#surname
         }
     }
 
-    #removePlayerButtonEventListener () {
+    #removePlayerButtonEventListener() {
         const removePlayerButtons = document.querySelectorAll('.remove-player');
         for (let i = 0; i < removePlayerButtons.length; i++) {
             removePlayerButtons[i].addEventListener('click', (event) => {
@@ -32,57 +33,43 @@ class Player {
         }
     }
 
-    #removePlayerFromTimeSlot (event) {
+    #removePlayerFromTimeSlot(event) {
         const parent = event.target.parentNode;
 
         parent.parentNode.removeChild(parent);
     }
 
-    #buildPlayerHTML () {
+    #buildPlayerHTML() {
         // build new players element and append it
-        const newPlayerElement = document.createElement('div');
-        newPlayerElement.classList.add('player', 'bg-success', 'bg-opacity-50');
-        newPlayerElement.textContent = `${this.#firstname} ${this.#surname}`;
+        const newPlayerElement = createNewElement(
+            'div',
+            ['player', 'bg-success', 'bg-opacity-50'],
+            `${this.#firstname} ${this.#surname}`
+        )
 
-        const removeButton = document.createElement('button');
-        removeButton.classList.add('remove-player', 'btn', 'btn-danger');
-        removeButton.textContent = 'x';
+        const removeButton = createNewElement(
+            'button',
+            ['remove-player', 'btn', 'btn-danger'],
+            'x'
+        )
+
         newPlayerElement.appendChild(removeButton);
 
         // this.#removePlayerButtonEventListener();
-
         return newPlayerElement;
     }
 
-    render () {
+    render() {
         return this.#buildPlayerHTML()
     }
 }
 
+/*
 const player = new Player();
 player.firstname = "Franz";
 player.surname = "Müller";
-player.render();
+player.render();*/
 //console.log(player.render().querySelector("button").textContent);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*

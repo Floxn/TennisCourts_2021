@@ -29,21 +29,30 @@ class Court {
 
 
     #buildCourtHTML () {
-
         const courtNumberClass = `court-${this.#courtNumber}`;
 
         // Build Court Wrapper
-        const newCourt = document.createElement('div');
-        newCourt.classList.add('court', courtNumberClass);
-        newCourt.id = courtNumberClass;
+        const newCourt = createNewElement(
+            'div',
+            [courtNumberClass],
+            '',
+            {},
+            courtNumberClass
+        )
 
         // Build Court Headline
-        const courtHeadline = document.createElement('h2');
-        courtHeadline.textContent = `Court-No: ${this.#courtNumber}`;
+        const courtHeadline = createNewElement(
+            'h2',
+            [],
+            `Court-No: 
+            ${this.#courtNumber}`
+        )
 
         // Build Timeslots Wrapper
-        const courtTimeSlots = document.createElement('div');
-        courtTimeSlots.classList.add('court-slots');
+        const courtTimeSlots = createNewElement(
+            'div',
+            ['court-slots']
+        )
 
         this.#buildTimeslotHTML(courtTimeSlots);
 
