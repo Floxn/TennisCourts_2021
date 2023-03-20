@@ -26,13 +26,13 @@ class Timeslot {
         }
     }
 
-    set playerToCollection (player) {
+    set setPlayerToCollection (player) {
         if (this.#playerCollection.length <= 3) {
             this.#playerCollection.push(player);
         }
     }
 
-    get playerCollection () {
+    get getPlayerCollection () {
         if (this.#playerCollection.length > 0) {
             return this.#playerCollection
         }
@@ -66,7 +66,7 @@ class Timeslot {
 
     #newPlayer(playerFirstname, playerLastname) {
         const player = new Player()
-        this.playerToCollection = player;
+        this.setPlayerToCollection = player;
 
         player.firstname = playerFirstname;
         player.surname = playerLastname;
@@ -74,7 +74,8 @@ class Timeslot {
         const renderedPlayer = player.render();
 
         this.#closeModal();
-        return this.render();
+        console.log(this.#playerCollection)
+        return player.render();
     }
 
 
@@ -132,9 +133,6 @@ class Timeslot {
     }
 
     #buildSlotHTML () {
-        const allSlots = document.createElement('div');
-        allSlots.classList.add('time-slots');
-
         const theSlot = document.createElement('div');
         theSlot.classList.add('time-slot');
 
@@ -166,8 +164,6 @@ class Timeslot {
         addPlayerButton.addEventListener("click", () => {
             // TODO öffne hier das Modal, erstmal fest hier rein und nicht als extra Klasse
             this.#addPlayer(addPlayerButton);
-            console.log("HI" + this.playerCollection[0].surname)
-            this.#modalSetFocusToFirstnameOnOpen();
 
             // this.#closeModal(); muss noch irgendwo rein
         })
@@ -179,12 +175,11 @@ class Timeslot {
         courtSlots.appendChild(theSlot);
 */
 
-        allSlots.appendChild(theSlot);
         theSlot.appendChild(slotTime);
         theSlot.appendChild(slotPlayer);
         theSlot.appendChild(addPlayerButton);
 
-        return allSlots
+        return theSlot
     }
 
     render (timeSlot) {

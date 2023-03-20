@@ -29,7 +29,6 @@ for (let timeSlots = 7; timeSlots <= 21; timeSlots++) {
     const timeslot1 = new Timeslot();
     timeslot1.begin = `${timeSlots}:00 Uhr`;
     timeslot1.end = `${timeSlots + 1}:00 Uhr`;
-    console.log(timeslot1.playerCollection)
 
     // document.body.appendChild(timeslot1.render())
     court.timeslot = timeslot1;
@@ -40,4 +39,4 @@ document.body.appendChild(court.render())
 
 
 const facility = new Facility();
-console.log(facility);
+// console.log(facility);

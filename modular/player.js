@@ -24,12 +24,9 @@ class Player {
     }
 
     #removePlayerButtonEventListener () {
-        console.log('removePlayerButtonEventListener')
         const removePlayerButtons = document.querySelectorAll('.remove-player');
-        console.log(removePlayerButtons)
         for (let i = 0; i < removePlayerButtons.length; i++) {
             removePlayerButtons[i].addEventListener('click', (event) => {
-                console.log('click');
                 this.#removePlayerFromTimeSlot(event);
             });
         }
@@ -52,9 +49,7 @@ class Player {
         removeButton.textContent = 'x';
         newPlayerElement.appendChild(removeButton);
 
-        console.log('player builded')
         // this.#removePlayerButtonEventListener();
-        console.log('remove eventlistener is set')
 
         return newPlayerElement;
     }
