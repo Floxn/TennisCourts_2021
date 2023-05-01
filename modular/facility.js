@@ -20,7 +20,7 @@ class Facility {
 
 
 const court = new Court();
-court.courtNumber = 1;
+court.courtNumber = 1; // ?
 for (let timeSlots = 7; timeSlots <= 21; timeSlots++) {
     const timeslot1 = new Timeslot();
     timeslot1.begin = `${timeSlots}:00 Uhr`;

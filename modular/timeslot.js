@@ -6,27 +6,37 @@ class Timeslot {
     #begin = "";
     #end = "";
 
+    #playerSlotElement;
+
     #playerCollection = [];
 
-    set begin (begin) {
-        if(this.#begin.length === 0) {
+    set begin(begin) {
+        if (this.#begin.length === 0) {
             this.#begin = begin;
         }
     }
 
-    set end (end) {
-        if(this.#end.length === 0) {
+    set end(end) {
+        if (this.#end.length === 0) {
             this.#end = end;
         }
     }
 
-    set setPlayerToCollection (player) {
+    set setPlayerToCollection(player) {
         if (this.#playerCollection.length <= 3) {
             this.#playerCollection.push(player);
         }
     }
 
-    get getPlayerCollection () {
+    set setPlayerSlotElement(domEl) {
+        this.#playerSlotElement = domEl;
+    }
+
+    get getPlayerSlotElement() {
+        return this.#playerSlotElement;
+    }
+
+    get getPlayerCollection() {
         if (this.#playerCollection.length > 0) {
             return this.#playerCollection
         }
@@ -37,18 +47,15 @@ class Timeslot {
         this.#modalSetFocusToFirstnameOnOpen();
     }
 
-    #closeModal () {
-        // TODO Mentoring: Hier hab ich kein Bootstrap zur Verfügungen, i think
-        //  const newModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    #closeModal() {
         document.querySelector('[data-player-firstname]').value = '';
         document.querySelector('[data-player-lastname]').value = '';
-        // newModal.hide();
         document.querySelector('.btn-close').click();
     }
 
-    #modalSetFocusToFirstnameOnOpen () {
+    #modalSetFocusToFirstnameOnOpen() {
         // set the focus to the firstname on show.bs.modal event
-        const theModal = document.getElementById('staticBackdrop');
+        const theModal = document.getElementById('modal');
         theModal.addEventListener('show.bs.modal', event => {
             const firstnameInput = theModal.querySelector('[data-player-firstname]');
             // timeout is needed to begin after the fade in of the modal
@@ -57,8 +64,6 @@ class Timeslot {
             }, 1)
         })
     }
-
-
 
 
     // TODO Mentoring: Wie wird der Player hier eingebunden? Benutzt man new Player(), oder schreibt man den Player in die Variable playerCollection und rendert dann den Slot?
@@ -72,47 +77,64 @@ class Timeslot {
 
         const renderedPlayer = player.render();
 
-        this.#closeModal();
+        this.#closeModal(); // TODO Mentoring: Das hier sollte sicherlich asyncron bei addPlayer be on click passieren
         console.log(this.#playerCollection)
-        return player.render();
+        return player.render(this.getPlayerSlotElement);
     }
 
 
+    #addPlayer(addPlayerButton, slotPlayer) {
+        // Modal öffnen
+        const theModal = document.getElementById('modal');
+        theModal.style.display = "block";
+        // theModal.modal('show');
+        // Fokus auf erstes Feld Vorname
+        const firstnameInput = theModal.querySelector('[data-player-firstname]');
+        firstnameInput.focus();
 
-    #addPlayer (addPlayerButton) {
+        // Close btn
+        const closeBtn = document.querySelector(".btn-close")
+        closeBtn.addEventListener("click", () => {
+            theModal.style.display = "none";
+        })
 
+        //  slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
         // TODO Mentoring: kann man die Methode #addPlayer() vereinfachter schreiben?
-        const confirmPlayerButton = document.querySelector('[data-confirm-player]');
-        confirmPlayerButton.addEventListener('click', () => {
+        /* const confirmPlayerButton = document.querySelector('[data-confirm-player]');
+         confirmPlayerButton.addEventListener('click', (event) => {
 
-            const playerFirstname = document.querySelector('[data-player-firstname]').value;
-            const playerLastname = document.querySelector('[data-player-lastname]').value;
+             const playerFirstname = document.querySelector('[data-player-firstname]');
+             const playerLastname = document.querySelector('[data-player-lastname]');
 
-            if (!playerFirstname || !playerLastname) {
-                if (!playerFirstname && !playerLastname) {
-                    document.querySelector('[data-player-firstname]').focus();
-                    return alert('Please enter first and lastname');
-                }
-                if (!playerFirstname && playerLastname) {
-                    document.querySelector('[data-player-firstname]').focus();
-                    return alert('Please enter firstname');
-                }
-                if (playerFirstname && !playerLastname) {
-                    document.querySelector('[data-player-lastname]').focus();
-                    return alert('Please enter lastname');
-                }
-            }
+             if (!playerFirstname.value || !playerLastname.value) {
+                 if (!playerFirstname.value && !playerLastname.value) {
+                     document.querySelector('[data-player-firstname]').focus();
+                     return alert('Please enter first and lastname');
+                 }
+                 if (!playerFirstname.value && playerLastname.value) {
+                     document.querySelector('[data-player-firstname]').focus();
+                     return alert('Please enter firstname');
+                 }
+                 if (playerFirstname.value && !playerLastname.value) {
+                     document.querySelector('[data-player-lastname]').focus();
+                     return alert('Please enter lastname');
+                 }
+             }
 
-            const newPlayer = addPlayerButton.previousSibling;
-            return newPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
-        });
+             slotPlayer.appendChild(this.#newPlayer(playerFirstname.value, playerLastname.value))
+         });*/
 
         // Make input submit with the enter key
         const playerFirstnameInput = document.querySelector('[data-player-firstname]');
         const playerLastnameInput = document.querySelector('[data-player-lastname]');
 
-        document.body.addEventListener('keypress', event => {
-            if(event.key === 'Enter') {
+
+        // TODO MENTROTING: DIESER BLÖDE EVENTLISTENER MUSS IRGENDWO WIEDER GELÖSCHT WERDEN; Irgendwie vervielfachen sich diese
+
+
+        document.body.addEventListener('keydown', event => {
+            console.log(event)
+            if (event.key === 'Enter') {
                 if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
                     return
                 }
@@ -125,13 +147,14 @@ class Timeslot {
                     return
                 }
 
-                const newPlayer = addPlayerButton.previousSibling;
-                return newPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
+                //const newPlayer = addPlayerButton.previousSibling;
+                //slotPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
+                slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
             }
         })
     }
 
-    #buildSlotHTML () {
+    #buildSlotHTML() {
         const theSlot = createNewElement(
             'div',
             ['time-slot']
@@ -165,27 +188,29 @@ class Timeslot {
             ['time-slot-players']
         )
 
+        //this.setPlayerSlotElement = slotPlayer;
+
         // Build add Player Button
         const addPlayerButton = createNewElement(
             'button',
             ['add-player', 'btn', 'btn-sm', 'btn-outline-success'],
             'add new Player',
-            {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'}
+            // {'data-bs-toggle': 'modal', 'data-bs-target': '#staticBackdrop'}
         );
-
-        addPlayerButton.addEventListener("click", () => {
-            // TODO öffne hier das Modal, erstmal fest hier rein und nicht als extra Klasse
-            this.#addPlayer(addPlayerButton);
-        })
 
         theSlot.appendChild(slotTime);
         theSlot.appendChild(slotPlayer);
         theSlot.appendChild(addPlayerButton);
 
+        addPlayerButton.addEventListener("click", () => {
+            // TODO öffne hier das Modal, erstmal fest hier rein und nicht als extra Klasse
+            this.#addPlayer(addPlayerButton, slotPlayer);
+        })
+
         return theSlot
     }
 
-    render (timeSlot) {
+    render(timeSlot) {
         // timeSlot.innerHTML = "";
         this.#init();
         return this.#buildSlotHTML(timeSlot)

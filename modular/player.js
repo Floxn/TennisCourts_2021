@@ -39,7 +39,7 @@ class Player {
         parent.parentNode.removeChild(parent);
     }
 
-    #buildPlayerHTML() {
+    #buildPlayerHTML(slotEl) {
         // build new players element and append it
         const newPlayerElement = createNewElement(
             'div',
@@ -59,8 +59,8 @@ class Player {
         return newPlayerElement;
     }
 
-    render() {
-        return this.#buildPlayerHTML()
+    render(slotEl) {
+        return this.#buildPlayerHTML(slotEl)
     }
 }
 
