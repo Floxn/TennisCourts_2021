@@ -82,6 +82,28 @@ class Timeslot {
         return player.render(this.getPlayerSlotElement);
     }
 
+    #setPlayerName(event, addPlayerButton, slotPlayer) {
+        console.log(event, addPlayerButton, slotPlayer)
+        if (event.key === 'Enter') {
+            if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
+                return
+            }
+            if (event.target === playerLastnameInput && playerFirstnameInput.value === '') {
+                playerFirstnameInput.focus();
+                return
+            }
+            if (event.target === playerFirstnameInput && playerLastnameInput.value === '') {
+                playerLastnameInput.focus();
+                return
+            }
+
+            const newPlayer = addPlayerButton.previousSibling;
+            slotPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
+            //slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
+
+            document.body.removeEventListener('keydown')
+        }
+    }
 
     #addPlayer(addPlayerButton, slotPlayer) {
         // Modal öffnen
@@ -130,6 +152,7 @@ class Timeslot {
 
 
         // TODO MENTROTING: DIESER BLÖDE EVENTLISTENER MUSS IRGENDWO WIEDER GELÖSCHT WERDEN; Irgendwie vervielfachen sich diese
+        // Alternative war als Versuch document.body.removeEventListener('keydown', this.#setPlayerName(event, addPlayerButton, slotPlayer))
 
 
         document.body.addEventListener('keydown', event => {
@@ -150,6 +173,8 @@ class Timeslot {
                 //const newPlayer = addPlayerButton.previousSibling;
                 //slotPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
                 slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
+
+                document.body.removeEventListener('keydown')  
             }
         })
     }
