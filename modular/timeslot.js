@@ -1,14 +1,20 @@
-// TODO Löschen der einzelnen Spieler muss noch implementiert werden
 // TODO maximale Anzahl an Player setzen
-// TODO beim löschen muss einmal komplett rerendered werden
 
 class Timeslot {
     #begin = "";
     #end = "";
 
+    // TODO add UUID
+
     #playerSlotElement;
 
     #playerCollection = [];
+
+    #currentTimeSlot;
+
+    set timeslot(timeslot) {
+        this.#currentTimeSlot = timeslot
+    }
 
     set begin(begin) {
         if (this.#begin.length === 0) {
@@ -42,7 +48,6 @@ class Timeslot {
         }
     }
 
-
     #init() {
         this.#modalSetFocusToFirstnameOnOpen();
     }
@@ -65,23 +70,25 @@ class Timeslot {
         })
     }
 
-
-    // TODO Mentoring: Wie wird der Player hier eingebunden? Benutzt man new Player(), oder schreibt man den Player in die Variable playerCollection und rendert dann den Slot?
-
     #newPlayer(playerFirstname, playerLastname) {
         const player = new Player()
         player.firstname = playerFirstname;
         player.surname = playerLastname;
 
+        const currentPlayerCollectionPostion = this.#playerCollection.length;
+
         this.setPlayerToCollection = player;
 
-        const renderedPlayer = player.render();
+        this.#closeModal(); // TODO Mentoring: Das hier sollte sicherlich asyncron bei addPlayer bei on click passieren
+        const renderedPlayer = player.render(this.getPlayerSlotElement);
 
-        this.#closeModal(); // TODO Mentoring: Das hier sollte sicherlich asyncron bei addPlayer be on click passieren
-        console.log(this.#playerCollection)
-        return player.render(this.getPlayerSlotElement);
+        renderedPlayer.querySelector("button").addEventListener("click", () => {
+            this.#playerCollection.splice(currentPlayerCollectionPostion, 1)
+            renderedPlayer.remove();
+        })
+
+        return renderedPlayer;
     }
-
 
     #addPlayer(addPlayerButton, slotPlayer) {
         // Modal öffnen
@@ -98,7 +105,7 @@ class Timeslot {
             theModal.style.display = "none";
         })
 
-        //  slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
+        // slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
         // TODO Mentoring: kann man die Methode #addPlayer() vereinfachter schreiben?
         /* const confirmPlayerButton = document.querySelector('[data-confirm-player]');
          confirmPlayerButton.addEventListener('click', (event) => {
@@ -128,12 +135,7 @@ class Timeslot {
         const playerFirstnameInput = document.querySelector('[data-player-firstname]');
         const playerLastnameInput = document.querySelector('[data-player-lastname]');
 
-
-        // TODO MENTROTING: DIESER BLÖDE EVENTLISTENER MUSS IRGENDWO WIEDER GELÖSCHT WERDEN; Irgendwie vervielfachen sich diese
-
-
-        document.body.addEventListener('keydown', event => {
-            console.log(event)
+        const handleKeyDown = (event) => {
             if (event.key === 'Enter') {
                 if (event.target !== playerFirstnameInput && event.target !== playerLastnameInput) {
                     return
@@ -147,11 +149,13 @@ class Timeslot {
                     return
                 }
 
-                //const newPlayer = addPlayerButton.previousSibling;
-                //slotPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
-                slotPlayer.appendChild(this.#newPlayer("Maria", "Müller"))
+                slotPlayer.appendChild(this.#newPlayer(playerFirstnameInput.value, playerLastnameInput.value))
+
+                document.body.removeEventListener('keydown', handleKeyDown)
             }
-        })
+        }
+
+        document.body.addEventListener('keydown', handleKeyDown)
     }
 
     #buildSlotHTML() {
@@ -212,6 +216,7 @@ class Timeslot {
 
     render(timeSlot) {
         // timeSlot.innerHTML = "";
+        this.timeslot = timeSlot;
         this.#init();
         return this.#buildSlotHTML(timeSlot)
     }

@@ -1,3 +1,5 @@
+// TODO rewrite as a class
+
 // Get the modal
 const modal = document.getElementById("modal");
 

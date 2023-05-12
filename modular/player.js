@@ -1,6 +1,3 @@
-// TODO Mentoring: removePlayerButtonEventListener() will nicht so richtig funktionieren
-//  -> falsche stelle vom eventListener?
-
 class Player {
     #firstname = "";
     #surname = "";
@@ -24,21 +21,6 @@ class Player {
         }
     }
 
-    #removePlayerButtonEventListener() {
-        const removePlayerButtons = document.querySelectorAll('.remove-player');
-        for (let i = 0; i < removePlayerButtons.length; i++) {
-            removePlayerButtons[i].addEventListener('click', (event) => {
-                this.#removePlayerFromTimeSlot(event);
-            });
-        }
-    }
-
-    #removePlayerFromTimeSlot(event) {
-        const parent = event.target.parentNode;
-
-        parent.parentNode.removeChild(parent);
-    }
-
     #buildPlayerHTML(slotEl) {
         // build new players element and append it
         const newPlayerElement = createNewElement(
@@ -55,7 +37,6 @@ class Player {
 
         newPlayerElement.appendChild(removeButton);
 
-        // this.#removePlayerButtonEventListener();
         return newPlayerElement;
     }
 
@@ -63,26 +44,3 @@ class Player {
         return this.#buildPlayerHTML(slotEl)
     }
 }
-
-/*
-const player = new Player();
-player.firstname = "Franz";
-player.surname = "Müller";
-player.render();*/
-//console.log(player.render().querySelector("button").textContent);
-
-
-/*
-
-function player (playerName) {
-    this.name = playerName
-}
-
-player.prototype = {
-    setName: function () {
-
-    }
-}
-
-new player("Frank")
-*/
